@@ -1,0 +1,83 @@
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cefiishop
+      MYSQL_USER: cefiishop_user
+      MYSQL_PASSWORD: cefiishop_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11435:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  ollama-init:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: >
+      /bin/sh -c "
+        until ollama list > /dev/null 2>&1; do
+          echo 'Attente de Ollama...';
+          sleep 2;
+        done;
+        ollama pull phi3:mini
+      "
+    volumes:
+      - ollama_data:/root/.ollama
+
+  app:
+    image: maven:3.9-eclipse-temurin-21
+    working_dir: /app
+    volumes:
+      - .:/app
+      - maven_cache:/root/.m2
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+      mongo:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cefiishop?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: cefiishop_user
+      SPRING_DATASOURCE_PASSWORD: cefiishop_pass
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/cefiishop
+      SPRING_AI_OLLAMA_BASE_URL: http://ollama:11434
+      SPRING_AI_OLLAMA_CHAT_MODEL: qwen2.5:1.5b
+    command: mvn spring-boot:run
+
+volumes:
+  db_data:
+  mongo_data:
+  maven_cache:
+  ollama_data:
+
+networks:
+  default:
+    enable_ipv6: true
