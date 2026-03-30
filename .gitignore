@@ -16,3 +16,6 @@ Thumbs.db
 
 # Spring Boot
 application-local.properties
+
+# Variables d'environnement
+.env
