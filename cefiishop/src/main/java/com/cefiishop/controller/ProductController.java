@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cefiishop.dto.ProductResponse;
 import com.cefiishop.service.ProductService;
+import com.cefiishop.service.RecommendationService;
 
 @RestController
 @RequestMapping("/api/products")
@@ -19,9 +20,11 @@ import com.cefiishop.service.ProductService;
 public class ProductController {
 
     private final ProductService productService;
+    private final RecommendationService recommendationService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, RecommendationService recommendationService) {
         this.productService = productService;
+        this.recommendationService = recommendationService;
     }
 
     @GetMapping
@@ -52,5 +55,10 @@ public class ProductController {
     @GetMapping("/category/{categoryId}/sorted")
     public ResponseEntity<List<ProductResponse>> getProductsByCategoryOrderByPrice(@PathVariable Integer categoryId) {
         return ResponseEntity.ok(productService.getProductsByCategoryOrderByPrice(categoryId));
+    }
+
+    @GetMapping("/{id}/recommendations")
+    public ResponseEntity<List<ProductResponse>> getRecommendations(@PathVariable Integer id) {
+        return ResponseEntity.ok(recommendationService.getRecommendations(id));
     }
 }
