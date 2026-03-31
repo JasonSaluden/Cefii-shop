@@ -17,13 +17,6 @@ services:
       timeout: 5s
       retries: 5
 
-  mongo:
-    image: mongo:7.0
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
   ollama:
     image: ollama/ollama:latest
     ports:
@@ -43,7 +36,8 @@ services:
           echo 'Attente de Ollama...';
           sleep 2;
         done;
-        ollama pull phi3:mini
+        ollama pull phi3:mini &&
+        ollama pull nomic-embed-text
       "
     volumes:
       - ollama_data:/root/.ollama
@@ -61,13 +55,11 @@ services:
         condition: service_healthy
       ollama:
         condition: service_started
-      mongo:
-        condition: service_started
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cefiishop?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: cefiishop_user
       SPRING_DATASOURCE_PASSWORD: cefiishop_pass
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/cefiishop
+      SPRING_DATA_MONGODB_URI: ${MONGODB_ATLAS_URI}
       SPRING_AI_OLLAMA_BASE_URL: http://ollama:11434
       SPRING_AI_OLLAMA_CHAT_MODEL: phi3:mini
       SPRING_AI_VECTORSTORE_MONGODB_URI: ${MONGODB_ATLAS_URI}
@@ -75,7 +67,6 @@ services:
 
 volumes:
   db_data:
-  mongo_data:
   maven_cache:
   ollama_data:
 
