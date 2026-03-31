@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Document(collection = "Conversation")
-public class conversation {
+public class Conversation {
 
     @Id
     private String id;

@@ -16,13 +16,13 @@ public class UserBehavior {
     @Id
     private String id;
 
-    private Long userId; // référence au User SQL
+    private Long userId;
 
     private List<ProductView> viewedProducts = new ArrayList<>();
 
     @Data
     public static class ProductView {
-        private Long productId; // référence au Product SQL
+        private Long productId; 
         private LocalDateTime viewedAt = LocalDateTime.now();
     }
 }
