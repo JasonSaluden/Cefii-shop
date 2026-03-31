@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Test Chatbot</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <script type="text/babel">
+    const API = "http://localhost:8080";
+
+    function App() {
+      const [conversationId, setConversationId] = React.useState(null);
+      const [messages, setMessages] = React.useState([]);
+      const [input, setInput] = React.useState("");
+      const [userId, setUserId] = React.useState("test-user");
+      const [loading, setLoading] = React.useState(false);
+      const [error, setError] = React.useState(null);
+
+      async function startConversation() {
+        setError(null);
+        const res = await fetch(`${API}/api/conversations`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
+        });
+        if (!res.ok) { setError("Erreur lors de la création de la conversation"); return; }
+        const data = await res.json();
+        setConversationId(data.id);
+        setMessages(data.messages || []);
+      }
+
+      async function sendMessage() {
+        if (!input.trim() || !conversationId) return;
+        setLoading(true);
+        setError(null);
+        const res = await fetch(`${API}/api/chat/${conversationId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: input }),
+        });
+        if (!res.ok) { setError("Erreur lors de l'envoi du message"); setLoading(false); return; }
+        const data = await res.json();
+        setMessages(data.messages || []);
+        setInput("");
+        setLoading(false);
+      }
+
+      function handleKeyDown(e) {
+        if (e.key === "Enter") sendMessage();
+      }
+
+      return (
+        <div>
+          <h1>Test Chatbot — CefiiShop</h1>
+
+          {!conversationId ? (
+            <div>
+              <label>User ID : </label>
+              <input
+                value={userId}
+                onChange={e => setUserId(e.target.value)}
+              />
+              <button onClick={startConversation}>Démarrer une conversation</button>
+            </div>
+          ) : (
+            <div>
+              <p>Conversation ID : <code>{conversationId}</code></p>
+
+              <div style={{ border: "1px solid black", height: "300px", overflowY: "scroll", padding: "8px" }}>
+                {messages.length === 0 && <p><em>Aucun message.</em></p>}
+                {messages.map((msg, i) => (
+                  <div key={i}>
+                    <strong>{msg.role} :</strong> {msg.content}
+                  </div>
+                ))}
+              </div>
+
+              <input
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Votre message..."
+                disabled={loading}
+                style={{ width: "400px" }}
+              />
+              <button onClick={sendMessage} disabled={loading}>
+                {loading ? "Envoi..." : "Envoyer"}
+              </button>
+            </div>
+          )}
+
+          {error && <p style={{ color: "red" }}>{error}</p>}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
