@@ -58,13 +58,7 @@ export default function Navbar() {
             <a href="#contact" onClick={() => setOpen(false)} className="block py-3 text-sm font-medium text-text hover:text-primary-light">
               Contact
             </a>
-            <a
-              href={PHONE_LINK}
-              className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-urgent px-4 py-3 text-sm font-bold text-white"
-            >
-              <FiPhone />
-              URGENCE : {PHONE}
-            </a>
+ 
           </div>
         )}
       </nav>
