@@ -5,7 +5,8 @@
       "Bash(for f:*)",
       "Bash(do echo:*)",
       "Read(//c/Users/jason.saluden/Cefii-shop/**)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(xargs grep:*)"
     ]
   }
 }

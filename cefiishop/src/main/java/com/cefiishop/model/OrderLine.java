@@ -1,16 +1,10 @@
 package com.cefiishop.model;
 
 import java.math.BigDecimal;
-
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
 @Table(name = "OrderLine")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class OrderLine {
 
     @Id
@@ -30,4 +24,25 @@ public class OrderLine {
 
     @Column(nullable = false, precision = 10, scale = 2, name = "prix_unitaire")
     private BigDecimal prixUnitaire;
+
+    public OrderLine() {}
+
+    public OrderLine(Integer id, Order order, Product product, Integer quantite, BigDecimal prixUnitaire) {
+        this.id = id;
+        this.order = order;
+        this.product = product;
+        this.quantite = quantite;
+        this.prixUnitaire = prixUnitaire;
+    }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public Order getOrder() { return order; }
+    public void setOrder(Order order) { this.order = order; }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
+    public Integer getQuantite() { return quantite; }
+    public void setQuantite(Integer quantite) { this.quantite = quantite; }
+    public BigDecimal getPrixUnitaire() { return prixUnitaire; }
+    public void setPrixUnitaire(BigDecimal prixUnitaire) { this.prixUnitaire = prixUnitaire; }
 }
