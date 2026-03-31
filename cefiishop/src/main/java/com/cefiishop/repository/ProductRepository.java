@@ -20,4 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     
     @Query("SELECT p FROM Product p WHERE p.stock > 0")
     List<Product> findAvailableProducts();
+
+    @Query("SELECT p FROM Product p WHERE p.category.idCategory = :categoryId AND p.idProduct != :excludeId AND p.stock > 0 ORDER BY p.prix ASC")
+    List<Product> findSimilarProducts(@Param("categoryId") Integer categoryId, @Param("excludeId") Integer excludeId);
 }
