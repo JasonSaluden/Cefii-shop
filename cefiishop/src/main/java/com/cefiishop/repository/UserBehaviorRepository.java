@@ -10,5 +10,5 @@ import com.cefiishop.model.UserBehavior;
 @Repository
 public interface UserBehaviorRepository extends MongoRepository<UserBehavior, String> {
 
-    Optional<UserBehavior> findByUserId(Long userId);
+    Optional<UserBehavior> findByUserId(Integer userId);
 }

@@ -22,13 +22,13 @@ public class UserBehaviorController {
 
     @PostMapping("/{userId}/view/{productId}")
     public ResponseEntity<UserBehavior> addProductView(
-            @PathVariable Long userId,
-            @PathVariable Long productId) {
+            @PathVariable Integer userId,
+            @PathVariable Integer productId) {
         return ResponseEntity.ok(userBehaviorService.addProductView(userId, productId));
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserBehavior> getByUserId(@PathVariable Long userId) {
+    public ResponseEntity<UserBehavior> getByUserId(@PathVariable Integer userId) {
         return ResponseEntity.ok(userBehaviorService.getByUserId(userId));
     }
 }

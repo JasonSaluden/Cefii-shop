@@ -15,7 +15,7 @@ public class UserBehaviorService {
         this.userBehaviorRepository = userBehaviorRepository;
     }
 
-    public UserBehavior addProductView(Long userId, Long productId) {
+    public UserBehavior addProductView(Integer userId, Integer productId) {
         UserBehavior behavior = userBehaviorRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     UserBehavior b = new UserBehavior();
@@ -28,7 +28,7 @@ public class UserBehaviorService {
         return userBehaviorRepository.save(behavior);
     }
 
-    public UserBehavior getByUserId(Long userId) {
+    public UserBehavior getByUserId(Integer userId) {
         return userBehaviorRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Aucun comportement trouve pour l utilisateur : " + userId));
