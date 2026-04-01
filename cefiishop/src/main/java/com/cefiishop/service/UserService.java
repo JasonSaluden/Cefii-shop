@@ -29,7 +29,7 @@ public class UserService {
         }
 
         User user = new User();
-        user.setPseudo(request.getPseudo() != null ? request.getPseudo() : "");
+        user.setPseudo("");
         user.setMail(request.getMail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(User.UserRole.CLIENT);
@@ -59,7 +59,6 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouvé"));
 
-        user.setPseudo(request.getPseudo());
         user.setMail(request.getMail());
         
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
@@ -84,7 +83,6 @@ public class UserService {
     private UserResponse mapToResponse(User user) {
         UserResponse response = new UserResponse();
         response.setId(user.getId());
-        response.setPseudo(user.getPseudo());
         response.setMail(user.getMail());
         response.setRole(user.getRole().toString());
         response.setCreatedAt(user.getCreatedAt());

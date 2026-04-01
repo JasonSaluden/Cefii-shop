@@ -1,25 +1,15 @@
 package com.cefiishop.dto;
 
 public class UserRegisterRequest {
-    private String pseudo;
     private String mail;
     private String password;
 
     public UserRegisterRequest() {
     }
 
-    public UserRegisterRequest(String pseudo, String mail, String password) {
-        this.pseudo = pseudo;
+    public UserRegisterRequest(String mail, String password) {
         this.mail = mail;
         this.password = password;
-    }
-
-    public String getPseudo() {
-        return pseudo;
-    }
-
-    public void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
     }
 
     public String getMail() {

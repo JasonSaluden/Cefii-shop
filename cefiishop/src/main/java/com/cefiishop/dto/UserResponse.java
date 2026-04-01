@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 public class UserResponse {
     private Integer id;
-    private String pseudo;
     private String mail;
     private String role;
     private LocalDateTime createdAt;
@@ -12,9 +11,8 @@ public class UserResponse {
     public UserResponse() {
     }
 
-    public UserResponse(Integer id, String pseudo, String mail, String role, LocalDateTime createdAt) {
+    public UserResponse(Integer id, String mail, String role, LocalDateTime createdAt) {
         this.id = id;
-        this.pseudo = pseudo;
         this.mail = mail;
         this.role = role;
         this.createdAt = createdAt;
@@ -26,14 +24,6 @@ public class UserResponse {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getPseudo() {
-        return pseudo;
-    }
-
-    public void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
     }
 
     public String getMail() {
