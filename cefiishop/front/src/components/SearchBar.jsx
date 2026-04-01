@@ -10,6 +10,7 @@ export default function SearchBar({
 
     const handleChange = (e) => {
         setValue(e.target.value)
+        onSearch(e.target.value)
     }
 
     const handleKeyPress = (e) => {
@@ -42,7 +43,7 @@ export default function SearchBar({
                 }}
                 onSubmit={(e) => {
                     e.preventDefault()
-                    onSearch()
+                    onSearch(value)
                 }}
             >
                 <InputBase
@@ -73,7 +74,7 @@ export default function SearchBar({
                         },
                         transition: 'all 0.3s ease',
                     }}
-                    onClick={onSearch}
+                    onClick={() => onSearch(value)}
                 >
                     <SearchIcon />
                 </IconButton>
