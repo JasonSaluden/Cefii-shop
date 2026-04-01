@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
     Container,
     Grid,
@@ -12,155 +13,58 @@ import {
     Checkbox,
     Paper,
     Button,
-    Rating,
     Chip,
+    CircularProgress,
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import SearchBar from '../components/SearchBar'
-
-// Mock data - à remplacer par une API plus tard
-const MOCK_PRODUCTS = [
-    {
-        id: 1,
-        name: 'Canapé Moderne Orange',
-        category: 'Meubles',
-        price: 899,
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=400&fit=crop',
-        rating: 4.5,
-        reviews: 128,
-    },
-    {
-        id: 2,
-        name: 'Perceuse Électrique Pro',
-        category: 'Bricolage',
-        price: 149,
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=400&fit=crop',
-        rating: 4.8,
-        reviews: 45,
-    },
-    {
-        id: 3,
-        name: 'Smartphone dernière génération',
-        category: 'Électronique',
-        price: 999,
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=400&fit=crop',
-        rating: 4.6,
-        reviews: 312,
-    },
-    {
-        id: 4,
-        name: 'Appareil Photo Mirrorless',
-        category: 'Photo & Vidéo',
-        price: 1299,
-        image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500&h=400&fit=crop',
-        rating: 4.9,
-        reviews: 87,
-    },
-    {
-        id: 5,
-        name: 'Manette Gaming Wireless',
-        category: 'Jeux vidéo',
-        price: 79,
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=400&fit=crop',
-        rating: 4.7,
-        reviews: 234,
-    },
-    {
-        id: 6,
-        name: 'Chaise Gamer Ergonomique',
-        category: 'Meubles',
-        price: 349,
-        image: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=500&h=400&fit=crop',
-        rating: 4.4,
-        reviews: 156,
-    },
-    {
-        id: 7,
-        name: 'Écran 4K 27 pouces',
-        category: 'Électronique',
-        price: 499,
-        image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&h=400&fit=crop',
-        rating: 4.5,
-        reviews: 98,
-    },
-    {
-        id: 8,
-        name: 'Clavier Mécanique RGB',
-        category: 'Électronique',
-        price: 149,
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=400&fit=crop',
-        rating: 4.3,
-        reviews: 207,
-    },
-    {
-        id: 9,
-        name: 'Sofa Design Contemporain',
-        category: 'Meubles',
-        price: 1499,
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=400&fit=crop',
-        rating: 4.6,
-        reviews: 67,
-    },
-    {
-        id: 10,
-        name: 'Foreuse Perceuse 18V',
-        category: 'Bricolage',
-        price: 189,
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=400&fit=crop',
-        rating: 4.7,
-        reviews: 102,
-    },
-    {
-        id: 11,
-        name: 'Objectif Grand Angle',
-        category: 'Photo & Vidéo',
-        price: 599,
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=400&fit=crop',
-        rating: 4.8,
-        reviews: 54,
-    },
-    {
-        id: 12,
-        name: 'Console Jeux Dernière Génération',
-        category: 'Jeux vidéo',
-        price: 499,
-        image: 'https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=500&h=400&fit=crop',
-        rating: 4.9,
-        reviews: 421,
-    },
-]
-
-const CATEGORIES = [
-    'Meubles',
-    'Bricolage',
-    'Électronique',
-    'Photo & Vidéo',
-    'Jeux vidéo',
-]
+import { getAllProducts } from '../api/productApi'
+import { getAllCategories } from '../api/categoryApi'
+import { getProductImage } from '../assets/productImages'
+import { useCart } from '../context/CartContext'
 
 export default function Products() {
     const theme = useTheme()
-    const [searchQuery, setSearchQuery] = useState('')
+    const navigate = useNavigate()
+    const { addToCart } = useCart()
+    const [searchParams] = useSearchParams()
+    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
     const [priceRange, setPriceRange] = useState([0, 2000])
-    const [selectedCategories, setSelectedCategories] = useState([])
+    const [selectedCategories, setSelectedCategories] = useState(
+        searchParams.get('category') ? [searchParams.get('category')] : []
+    )
+    const [products, setProducts] = useState([])
+    const [categories, setCategories] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        Promise.all([getAllProducts(), getAllCategories()])
+            .then(([prods, cats]) => {
+                setProducts(prods)
+                setCategories(cats)
+                const maxPrice = Math.max(...prods.map(p => p.prix), 2000)
+                setPriceRange([0, maxPrice])
+            })
+            .finally(() => setLoading(false))
+    }, [])
 
     // Filtrer les produits
     const filteredProducts = useMemo(() => {
-        return MOCK_PRODUCTS.filter((product) => {
+        return products.filter((product) => {
             const matchesSearch =
-                product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                product.category.toLowerCase().includes(searchQuery.toLowerCase())
+                product.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                product.categoryNom.toLowerCase().includes(searchQuery.toLowerCase())
 
             const matchesPrice =
-                product.price >= priceRange[0] && product.price <= priceRange[1]
+                product.prix >= priceRange[0] && product.prix <= priceRange[1]
 
             const matchesCategory =
                 selectedCategories.length === 0 ||
-                selectedCategories.includes(product.category)
+                selectedCategories.includes(product.categoryNom)
 
             return matchesSearch && matchesPrice && matchesCategory
         })
-    }, [searchQuery, priceRange, selectedCategories])
+    }, [searchQuery, priceRange, selectedCategories, products])
 
     const handleCategoryToggle = (category) => {
         setSelectedCategories((prev) =>
@@ -170,14 +74,21 @@ export default function Products() {
         )
     }
 
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
+                <CircularProgress />
+            </Box>
+        )
+    }
+
     return (
         <Container maxWidth="xl" sx={{ py: 4 }}>
             {/* SearchBar */}
             <Box sx={{ mb: 4 }}>
                 <SearchBar
-                    placeholder="Chercher un produit, marque, catégorie..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Chercher un produit, catégorie..."
+                    onSearch={(query) => setSearchQuery(query)}
                 />
             </Box>
 
@@ -216,13 +127,13 @@ export default function Products() {
                                 Catégorie
                             </Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                {CATEGORIES.map((category) => (
+                                {categories.map((cat) => (
                                     <FormControlLabel
-                                        key={category}
+                                        key={cat.idCategory}
                                         control={
                                             <Checkbox
-                                                checked={selectedCategories.includes(category)}
-                                                onChange={() => handleCategoryToggle(category)}
+                                                checked={selectedCategories.includes(cat.nom)}
+                                                onChange={() => handleCategoryToggle(cat.nom)}
                                                 sx={{
                                                     color: theme.palette.primary.main,
                                                     '&.Mui-checked': {
@@ -231,7 +142,7 @@ export default function Products() {
                                                 }}
                                             />
                                         }
-                                        label={category}
+                                        label={cat.nom}
                                     />
                                 ))}
                             </Box>
@@ -284,13 +195,15 @@ export default function Products() {
                     <Grid container spacing={2.5} sx={{ justifyContent: 'center' }}>
                         {filteredProducts.length > 0 ? (
                             filteredProducts.map((product) => (
-                                <Grid item xs={12} sm={6} lg={4} key={product.id} sx={{ display: 'flex' }}>
+                                <Grid item xs={12} sm={6} lg={4} key={product.idProduct} sx={{ display: 'flex' }}>
                                     <Card
+                                        onClick={() => navigate(`/products/${product.idProduct}`)}
                                         sx={{
                                             width: '100%',
                                             height: '100%',
                                             display: 'flex',
                                             flexDirection: 'column',
+                                            cursor: 'pointer',
                                             transition: 'all 0.3s ease',
                                             '&:hover': {
                                                 transform: 'translateY(-8px)',
@@ -304,8 +217,8 @@ export default function Products() {
                                         <CardMedia
                                             component="img"
                                             height="240"
-                                            image={product.image}
-                                            alt={product.name}
+                                            image={getProductImage(product) || 'https://placehold.co/400x240?text=Produit'}
+                                            alt={product.nom}
                                             sx={{
                                                 objectFit: 'cover',
                                                 transition: 'transform 0.3s ease',
@@ -316,10 +229,10 @@ export default function Products() {
                                         />
 
                                         {/* Contenu Produit */}
-                                        <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minHeight: '280px' }}>
+                                        <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minHeight: '200px' }}>
                                             {/* Catégorie Badge */}
                                             <Chip
-                                                label={product.category}
+                                                label={product.categoryNom}
                                                 size="small"
                                                 sx={{
                                                     mb: 1,
@@ -342,32 +255,13 @@ export default function Products() {
                                                     color: theme.palette.primary.main,
                                                 }}
                                             >
-                                                {product.name}
+                                                {product.nom}
                                             </Typography>
 
-                                            {/* Rating */}
-                                            <Box
-                                                sx={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: 1,
-                                                    mb: 2,
-                                                }}
-                                            >
-                                                <Rating
-                                                    value={product.rating}
-                                                    readOnly
-                                                    size="small"
-                                                    sx={{
-                                                        '& .MuiRating-iconFilled': {
-                                                            color: theme.palette.secondary.main,
-                                                        },
-                                                    }}
-                                                />
-                                                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                                                    ({product.reviews})
-                                                </Typography>
-                                            </Box>
+                                            {/* Stock */}
+                                            <Typography variant="caption" sx={{ color: product.stock > 0 ? 'success.main' : 'error.main', mb: 1 }}>
+                                                {product.stock > 0 ? `En stock (${product.stock})` : 'Rupture de stock'}
+                                            </Typography>
 
                                             {/* Prix */}
                                             <Box
@@ -385,7 +279,7 @@ export default function Products() {
                                                         color: theme.palette.secondary.main,
                                                     }}
                                                 >
-                                                    {product.price}€
+                                                    {product.prix.toFixed(2)}€
                                                 </Typography>
                                             </Box>
 
@@ -394,6 +288,11 @@ export default function Products() {
                                                 <Button
                                                     fullWidth
                                                     variant="contained"
+                                                    disabled={product.stock === 0}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        addToCart(product, getProductImage(product))
+                                                    }}
                                                     sx={{
                                                         backgroundColor: theme.palette.primary.main,
                                                         color: 'white',

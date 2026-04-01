@@ -1,5 +1,9 @@
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+import MenuIcon from '@mui/icons-material/Menu'
+import PersonIcon from '@mui/icons-material/Person'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import Olivier from '../assets/logo.png'
 import {
     AppBar,
     Toolbar,
@@ -8,13 +12,12 @@ import {
     IconButton,
     Menu,
     MenuItem,
+    Badge,
 } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
-import PersonIcon from '@mui/icons-material/Person'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import Olivier from '../assets/logo.png'
+import { useCart } from '../context/CartContext'
 
 export default function Navbar() {
+    const { totalItems } = useCart()
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
 
@@ -114,7 +117,9 @@ export default function Navbar() {
                         to="/cart"
                         sx={{ color: '#D4AF37', textDecoration: 'none', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }}
                     >
-                        <ShoppingCartIcon />
+                        <Badge badgeContent={totalItems} color="error">
+                            <ShoppingCartIcon />
+                        </Badge>
                     </IconButton>
 
                     {/* Mobile Menu Button */}

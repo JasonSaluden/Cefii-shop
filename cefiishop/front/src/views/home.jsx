@@ -12,48 +12,59 @@ import {
 } from '@mui/material'
 import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
-import photo from '../assets/logo.png'
+import { useNavigate } from 'react-router-dom'
 import SearchBar from '../components/SearchBar'
+import { getAllCategories } from '../api/categoryApi'
+import { getAllProducts } from '../api/productApi'
+import productImages from '../assets/productImages'
 
 const slides = [
     {
         id: 1,
-        title: 'Livraison gratuite sur milliers d\'articles',
-        subtitle: 'Sans abonnement, sans engagement',
+        title: 'Équipez votre dragon pour l\'aventure',
+        subtitle: 'Selles, harnais, armures — tout pour voler en sécurité',
         bg: 'https://images.pexels.com/photos/5691635/pexels-photo-5691635.jpeg?auto=compress&cs=tinysrgb&w=1600',
     },
     {
         id: 2,
-        title: 'Nouveautés haute technologie',
-        subtitle: 'Smartphones, objets connectés et plus',
+        title: 'Prenez soin de votre compagnon',
+        subtitle: 'Produits d\'hygiène et de soin adaptés aux dragons',
         bg: 'https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg?auto=compress&cs=tinysrgb&w=1600',
     },
     {
         id: 3,
-        title: 'Promos exceptionnelles',
-        subtitle: 'Foncez sur nos meilleures offres',
+        title: 'Nouveautés & Promos',
+        subtitle: 'Découvrez nos dernières offres pour cavaliers et dragons',
         bg: 'https://images.pexels.com/photos/286973/pexels-photo-286973.jpeg?auto=compress&cs=tinysrgb&w=1600',
     },
-]
-
-const categories = [
-    { id: 1, title: 'Meubles', img: 'https://images.pexels.com/photos/1866149/pexels-photo-1866149.jpeg?auto=compress&cs=tinysrgb&w=1300' },
-    { id: 2, title: 'Bricolage', img: 'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=1300' },
-    { id: 3, title: 'Électronique', img: 'https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=1300' },
-    { id: 4, title: 'Photo & Vidéo', img: 'https://images.pexels.com/photos/606933/pexels-photo-606933.jpeg?auto=compress&cs=tinysrgb&w=1300' },
-    { id: 5, title: 'Jeux vidéo', img: 'https://images.pexels.com/photos/3945657/pexels-photo-3945657.jpeg?auto=compress&cs=tinysrgb&w=1300' },
 ]
 
 function Home() {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+    const navigate = useNavigate()
     const [current, setCurrent] = useState(0)
+    const [categories, setCategories] = useState([])
+    const [categoryImages, setCategoryImages] = useState({})
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrent((prev) => (prev + 1) % slides.length)
         }, 4500)
         return () => clearInterval(timer)
+    }, [])
+
+    useEffect(() => {
+        getAllCategories().then(setCategories)
+        getAllProducts().then((products) => {
+            const imgMap = {}
+            products.forEach((p) => {
+                if (!imgMap[p.idCategory] && productImages[p.idProduct]) {
+                    imgMap[p.idCategory] = productImages[p.idProduct]
+                }
+            })
+            setCategoryImages(imgMap)
+        })
     }, [])
 
     const handlePrev = () => setCurrent((current - 1 + slides.length) % slides.length)
@@ -64,8 +75,8 @@ function Home() {
             {/* === SEARCH BAR === */}
             <Container maxWidth="lg">
                 <SearchBar
-                    placeholder="Chercher un produit, marque, catégorie..."
-                    onSearch={(query) => console.log('Searching for:', query)}
+                    placeholder="Chercher un produit, catégorie..."
+                    onSearch={(query) => navigate(`/products${query ? `?search=${encodeURIComponent(query)}` : ''}`)}
                 />
             </Container>
 
@@ -240,13 +251,14 @@ function Home() {
                 <Box
                     sx={{
                         display: 'grid',
-                        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
+                        gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fit, minmax(180px, 1fr))',
                         gap: 3,
                     }}
                 >
                     {categories.map((cat) => (
                         <Card
-                            key={cat.id}
+                            key={cat.idCategory}
+                            onClick={() => navigate(`/products?category=${encodeURIComponent(cat.nom)}`)}
                             sx={{
                                 cursor: 'pointer',
                                 transition: 'all 0.3s ease',
@@ -261,12 +273,11 @@ function Home() {
                         >
                             <CardMedia
                                 component="img"
-                                height="200"
-                                image={cat.img}
-                                alt={cat.title}
-                                sx={{
-                                    objectFit: 'cover',
-                                }}
+                                height="160"
+                                image={categoryImages[cat.idCategory] || 'https://placehold.co/300x160?text=Catégorie'}
+                                alt={cat.nom}
+                                onError={(e) => { e.target.src = 'https://placehold.co/300x160?text=Catégorie' }}
+                                sx={{ objectFit: 'cover' }}
                             />
                             <CardContent
                                 sx={{
@@ -282,7 +293,7 @@ function Home() {
                                         color: theme.palette.primary.main,
                                     }}
                                 >
-                                    {cat.title}
+                                    {cat.nom}
                                 </Typography>
                             </CardContent>
                         </Card>
