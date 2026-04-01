@@ -4,16 +4,14 @@ public class UserRegisterRequest {
     private String pseudo;
     private String mail;
     private String password;
-    private String confirmPassword;
 
     public UserRegisterRequest() {
     }
 
-    public UserRegisterRequest(String pseudo, String mail, String password, String confirmPassword) {
+    public UserRegisterRequest(String pseudo, String mail, String password) {
         this.pseudo = pseudo;
         this.mail = mail;
         this.password = password;
-        this.confirmPassword = confirmPassword;
     }
 
     public String getPseudo() {
@@ -38,14 +36,6 @@ public class UserRegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 }
 

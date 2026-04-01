@@ -1,5 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createConversation, sendMessage as sendChatMessage } from '../api/chatApi';
 import './Chatbot.css';
+
+function getOrCreateUserId() {
+    let userId = localStorage.getItem('chatbot_user_id');
+    if (!userId) {
+        userId = 'user_' + Math.random().toString(36).slice(2, 11);
+        localStorage.setItem('chatbot_user_id', userId);
+    }
+    return userId;
+}
 
 export default function Chatbot({ title = "Assistant", placeholder = "Posez une question...", collapsedInitially = true }) {
     const [open, setOpen] = useState(!collapsedInitially);
@@ -7,6 +17,8 @@ export default function Chatbot({ title = "Assistant", placeholder = "Posez une 
         { id: 1, from: 'bot', text: `Bonjour ! Je peux aider à trouver des produits ou répondre aux questions.` }
     ]);
     const [input, setInput] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [conversationId, setConversationId] = useState(null);
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -15,28 +27,41 @@ export default function Chatbot({ title = "Assistant", placeholder = "Posez une 
         }
     }, [messages, open]);
 
+    useEffect(() => {
+        if (open && !conversationId) {
+            const userId = getOrCreateUserId();
+            createConversation(userId)
+                .then(conv => setConversationId(conv.id))
+                .catch(() => {});
+        }
+    }, [open, conversationId]);
+
     function toggleOpen() {
         setOpen(v => !v);
     }
 
-    function sendMessage(e) {
+    async function sendMessage(e) {
         e && e.preventDefault();
         const txt = input.trim();
-        if (!txt) return;
-        const userMsg = { id: Date.now(), from: 'user', text: txt };
-        setMessages(m => [...m, userMsg]);
-        setInput('');
+        if (!txt || loading || !conversationId) return;
 
-        // Simulate reply (replace this with real API call)
-        setTimeout(() => {
-            const reply = { id: Date.now() + 1, from: 'bot', text: `Vous avez demandé : "${txt}" — voici une suggestion de produit similaire.` };
-            setMessages(m => [...m, reply]);
-        }, 700);
+        setMessages(m => [...m, { id: Date.now(), from: 'user', text: txt }]);
+        setInput('');
+        setLoading(true);
+
+        try {
+            const conv = await sendChatMessage(conversationId, txt);
+            const lastMsg = conv.messages[conv.messages.length - 1];
+            setMessages(m => [...m, { id: Date.now() + 1, from: 'bot', text: lastMsg.content }]);
+        } catch {
+            setMessages(m => [...m, { id: Date.now() + 1, from: 'bot', text: "Une erreur s'est produite. Veuillez réessayer." }]);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
         <>
-            {/* Floating FAB when closed */}
             {!open && (
                 <button
                     className="chatbot-fab"
@@ -63,6 +88,11 @@ export default function Chatbot({ title = "Assistant", placeholder = "Posez une 
                                     <div className="chatbot-msg-text">{m.text}</div>
                                 </div>
                             ))}
+                            {loading && (
+                                <div className="chatbot-msg bot">
+                                    <div className="chatbot-msg-text chatbot-typing">...</div>
+                                </div>
+                            )}
                             <div ref={messagesEndRef} />
                         </div>
 
@@ -73,8 +103,9 @@ export default function Chatbot({ title = "Assistant", placeholder = "Posez une 
                                 onChange={e => setInput(e.target.value)}
                                 placeholder={placeholder}
                                 aria-label="Message"
+                                disabled={loading || !conversationId}
                             />
-                            <button className="chatbot-send" type="submit">Envoyer</button>
+                            <button className="chatbot-send" type="submit" disabled={loading || !conversationId}>Envoyer</button>
                         </form>
                     </div>
                 )}

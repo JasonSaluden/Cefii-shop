@@ -24,10 +24,6 @@ public class UserService {
     }
 
     public UserResponse register(UserRegisterRequest request) {
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new IllegalArgumentException("Les mots de passe ne correspondent pas");
-        }
-
         if (userRepository.existsByMail(request.getMail())) {
             throw new IllegalArgumentException("Cet email est déjà utilisé");
         }

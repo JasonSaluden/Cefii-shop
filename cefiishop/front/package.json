@@ -3,19 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^1.8.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router-dom": "^7.5.0",
-    "axios": "^1.8.4"
+    "react-router-dom": "^7.5.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.4.1",
-    "vite": "^6.3.1",
-    "@testing-library/react": "^16.3.2",
+    "@tailwindcss/vite": "^4.2.2",
     "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
-    "vitest": "^3.1.1",
-    "jsdom": "^26.1.0"
+    "@vitejs/plugin-react": "^4.4.1",
+    "jsdom": "^26.1.0",
+    "tailwindcss": "^4.2.2",
+    "vite": "^6.3.1",
+    "vitest": "^3.1.1"
   },
   "scripts": {
     "dev": "vite",

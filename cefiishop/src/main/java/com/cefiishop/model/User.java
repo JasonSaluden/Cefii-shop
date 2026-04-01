@@ -2,7 +2,18 @@ package com.cefiishop.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import jakarta.persistence.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "User")
@@ -16,7 +27,7 @@ public class User {
     @Column(nullable = false, columnDefinition = "enum('ADMIN','CLIENT') default 'CLIENT'")
     private UserRole role = UserRole.CLIENT;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String pseudo;
 
     @Column(nullable = false, length = 255, unique = true)

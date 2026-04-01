@@ -1,5 +1,5 @@
 import AuthForm from '../components/AuthForm'
-import axios from 'axios'
+import { login } from '../api/authApi'
 import { useNavigate } from 'react-router-dom'
 
 export default function Connection() {
@@ -12,8 +12,7 @@ export default function Connection() {
 
     async function handleSubmit(values) {
         try {
-            // example API call - adapt endpoint
-            await axios.post('/api/auth/login', values)
+            await login({ mail: values.email, password: values.password })
             navigate('/')
         } catch (err) {
             console.error(err)

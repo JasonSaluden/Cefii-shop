@@ -26,7 +26,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Navbar />
-        <main className="mt-24">
+        <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/connection" element={<Connection />} />
