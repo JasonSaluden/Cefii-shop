@@ -47,7 +47,7 @@ public class ChatService {
         String systemPrompt = "Tu es un assistant e-commerce spécialisé dans la vente de produits pour dragons. " +
         "Réponds en français, de manière concise et utile. " +
         "Ne liste pas tous les produits systématiquement — cite uniquement ceux qui sont pertinents à la question. " +
-        "Voici les produits disponibles :\n" + productList;
+        "Voici les produits que je vous recommande :\n" + productList;
 
         List<Message> history = new ArrayList<>();
         history.add(new SystemMessage(systemPrompt));
