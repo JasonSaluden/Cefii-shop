@@ -29,7 +29,7 @@ public class UserService {
         }
 
         User user = new User();
-        user.setPseudo(request.getPseudo());
+        user.setPseudo(request.getPseudo() != null ? request.getPseudo() : "");
         user.setMail(request.getMail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(User.UserRole.CLIENT);
