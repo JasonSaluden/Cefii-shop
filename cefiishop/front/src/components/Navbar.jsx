@@ -99,7 +99,14 @@ export default function Navbar() {
 
                 {/* Desktop Navigation */}
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3, alignItems: 'center' }}>
-                    <Link component={RouterLink} to="/" sx={navLinkSx}>Accueil</Link>
+                    <Button
+                        onClick={() => navigate('/products')}
+                        variant="outlined"
+                        size="small"
+                        sx={{ color: '#D4AF37', borderColor: '#D4AF37', fontWeight: 600, textTransform: 'none', '&:hover': { backgroundColor: 'rgba(212,175,55,0.1)', borderColor: '#D4AF37' } }}
+                    >
+                        Rechercher un produit
+                    </Button>
 
                     {/* Dropdown catégories */}
                     <Button
@@ -109,7 +116,7 @@ export default function Navbar() {
                         }
                         sx={{ color: '#f0f0f0', fontWeight: 500, textTransform: 'none', fontSize: '1rem', p: 0, minWidth: 0, '&:hover': { color: '#D4AF37', backgroundColor: 'transparent' } }}
                     >
-                        Produits
+                        Catégories
                     </Button>
                     <Menu
                         anchorEl={anchorElCat}
@@ -180,6 +187,7 @@ export default function Navbar() {
                     sx={{ display: { md: 'none' } }}
                 >
                     <MenuItem component={RouterLink} to="/" onClick={handleMenuClose}>Accueil</MenuItem>
+                    <MenuItem component={RouterLink} to="/products" onClick={handleMenuClose}>Rechercher un produit</MenuItem>
 
                     {/* Produits + sous-menu catégories */}
                     <MenuItem onClick={() => setShowMobileCats(prev => !prev)} sx={{ fontWeight: 600 }}>

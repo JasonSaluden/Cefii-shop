@@ -101,26 +101,9 @@ function Home() {
 
     return (
         <Box component="section">
-            {/* Bouton recherche */}
-            <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
-                <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => navigate('/products')}
-                    sx={{
-                        backgroundColor: '#0B1020',
-                        fontWeight: 600,
-                        px: 4,
-                        py: 1.5,
-                        borderRadius: 2,
-                        '&:hover': { backgroundColor: '#1a2240' },
-                    }}
-                >
-                    Rechercher un produit
-                </Button>
-            </Container>
 
             {/* === CAROUSEL === */}
+            <Box sx={{ mt: 4 }} />
             {recommendations.length > 0 && (
                 <Container maxWidth="lg" sx={{ mb: 1 }}>
                     <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.main, textAlign: 'center' }}>
