@@ -88,6 +88,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '18'
+          cache: false
       
       - name: Install Dependencies
         working-directory: ./cefiishop/front
@@ -179,6 +180,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: false
       
       - name: Install Frontend Dependencies
         working-directory: ./cefiishop/front
