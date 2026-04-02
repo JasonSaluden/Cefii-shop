@@ -88,12 +88,10 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: cefiishop/front/package-lock.json
       
       - name: Install Dependencies
         working-directory: ./cefiishop/front
-        run: npm ci
+        run: npm install
       
       - name: Build Frontend
         working-directory: ./cefiishop/front
