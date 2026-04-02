@@ -2,6 +2,7 @@ import './App.css'
 import { Toolbar } from '@mui/material'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import Chatbot from './components/Chatbot'
 import Connection from './views/connection'
 import Products from './views/products'
@@ -32,6 +33,7 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
               </Routes>
             </main>
+            <Footer />
             <Chatbot />
           </div>
         </BrowserRouter>
