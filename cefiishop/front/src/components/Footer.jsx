@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './Footer.css'
+import logo from '../assets/logo.png'
 
 export default function Footer() {
     const [email, setEmail] = useState('')
@@ -42,21 +43,23 @@ export default function Footer() {
             {/* Main Footer Content */}
             <div className="footer-content">
                 <div className="footer-section footer-brand">
-                    <h4>🐉 CefiiShop Dragons</h4>
+                    <div className="footer-logo">
+                        <img src={logo} alt="CefiiShop Dragons Logo" />
+                    </div>
                     <p className="brand-desc">
                         Votre destination premium pour les produits de dragons authentiques et majestueux
                     </p>
                     <div className="social-links">
-                        <a href="#" className="social-icon" aria-label="Facebook">
+                        <a href="https://facebook.com/DragonShop" className="social-icon" aria-label="Facebook">
                             f
                         </a>
-                        <a href="#" className="social-icon" aria-label="Instagram">
+                        <a href="https://instagram.com/DragonShop" className="social-icon" aria-label="Instagram">
                             📷
                         </a>
-                        <a href="#" className="social-icon" aria-label="Twitter">
+                        <a href="https://twitter.com/DragonShop" className="social-icon" aria-label="Twitter">
                             𝕏
                         </a>
-                        <a href="#" className="social-icon" aria-label="Discord">
+                        <a href="https://discord.com/invite/DragonShop" className="social-icon" aria-label="Discord">
                             💬
                         </a>
                     </div>
@@ -67,18 +70,6 @@ export default function Footer() {
                     <ul>
                         <li>
                             <a href="/products">Tous les produits</a>
-                        </li>
-                        <li>
-                            <a href="/products?category=figurines">Figurines</a>
-                        </li>
-                        <li>
-                            <a href="/products?category=vetements">Vêtements</a>
-                        </li>
-                        <li>
-                            <a href="/products?category=accessoires">Accessoires</a>
-                        </li>
-                        <li>
-                            <a href="/products?sort=new">Nouveautés</a>
                         </li>
                     </ul>
                 </div>
@@ -126,7 +117,7 @@ export default function Footer() {
                     <h5>Nous contacter</h5>
                     <div className="contact-info">
                         <p>
-                            📧 <a href="mailto:hello@cefiishop.com">hello@cefiishop.com</a>
+                            📧 <a href="mailto:hello@DragonShop.com">hello@DragonShop.com</a>
                         </p>
                         <p>📞 +33 (0)1 23 45 67 89</p>
                         <p>📍 42 Rue du Dragon, 75004 Paris</p>
@@ -138,7 +129,7 @@ export default function Footer() {
             <div className="footer-bottom">
                 <div className="footer-bottom-content">
                     <p className="copyright">
-                        &copy; 2024 CefiiShop Dragons. Tous droits réservés.
+                        &copy; {new Date().getFullYear()} CefiiShop Dragons. Tous droits réservés.
                     </p>
                     <div className="payment-methods">
                         <span className="payment-label">Paiements acceptés :</span>
