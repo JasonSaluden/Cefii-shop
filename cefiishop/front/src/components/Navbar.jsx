@@ -22,20 +22,24 @@ export default function Navbar() {
     const { totalItems } = useCart()
     const { user, logout } = useAuth()
     const navigate = useNavigate()
+    // Menu hamburger mobile
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
 
-    const handleMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget)
-    }
+    const handleMenuOpen = (event) => setAnchorEl(event.currentTarget)
+    const handleMenuClose = () => setAnchorEl(null)
 
-    const handleMenuClose = () => {
-        setAnchorEl(null)
-    }
+    // Menu déroulant icône profil
+    const [anchorElUser, setAnchorElUser] = React.useState(null)
+    const userMenuOpen = Boolean(anchorElUser)
+
+    const handleUserMenuOpen = (event) => setAnchorElUser(event.currentTarget)
+    const handleUserMenuClose = () => setAnchorElUser(null)
 
     const handleLogout = () => {
         logout()
         handleMenuClose()
+        handleUserMenuClose()
         navigate('/')
     }
 
@@ -73,33 +77,31 @@ export default function Navbar() {
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3, alignItems: 'center' }}>
                     <Link component={RouterLink} to="/" sx={navLinkSx}>Accueil</Link>
                     <Link component={RouterLink} to="/products" sx={navLinkSx}>Produits</Link>
-                    {user ? (
-                        <>
-                            <Link component={RouterLink} to="/profile" sx={navLinkSx}>Mon profil</Link>
-                            <Button
-                                onClick={handleLogout}
-                                sx={{ color: '#f0f0f0', fontWeight: 500, textTransform: 'none', '&:hover': { color: '#D4AF37' } }}
-                            >
-                                Déconnexion
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Link component={RouterLink} to="/connection" sx={navLinkSx}>Connexion</Link>
-                            <Link component={RouterLink} to="/register" sx={navLinkSx}>S'inscrire</Link>
-                        </>
-                    )}
                 </Box>
 
                 {/* Icons */}
                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <IconButton
-                        component={RouterLink}
-                        to={user ? '/profile' : '/connection'}
-                        sx={{ color: '#D4AF37' }}
-                    >
+                    <IconButton onClick={handleUserMenuOpen} sx={{ color: '#D4AF37' }}>
                         <PersonIcon />
                     </IconButton>
+                    <Menu
+                        anchorEl={anchorElUser}
+                        open={userMenuOpen}
+                        onClose={handleUserMenuClose}
+                        slotProps={{ paper: { sx: { mt: 1, minWidth: 160, borderRadius: 2 } } }}
+                    >
+                        {user ? (
+                            [
+                                <MenuItem key="profile" component={RouterLink} to="/profile" onClick={handleUserMenuClose}>Mon profil</MenuItem>,
+                                <MenuItem key="logout" onClick={handleLogout} sx={{ color: 'error.main' }}>Déconnexion</MenuItem>,
+                            ]
+                        ) : (
+                            [
+                                <MenuItem key="connection" component={RouterLink} to="/connection" onClick={handleUserMenuClose}>Connexion</MenuItem>,
+                                <MenuItem key="register" component={RouterLink} to="/register" onClick={handleUserMenuClose}>S'inscrire</MenuItem>,
+                            ]
+                        )}
+                    </Menu>
                     <IconButton
                         component={RouterLink}
                         to="/cart"
