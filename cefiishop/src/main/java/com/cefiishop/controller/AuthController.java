@@ -24,6 +24,8 @@ public class AuthController {
         this.userService = userService;
     }
 
+    // Endpoints pour l'inscription, la connexion et la déconnexion
+    
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody UserRegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(request));

@@ -24,6 +24,7 @@ public class ChatController {
         this.chatService = chatService;
     }
 
+    // Endpoint pour envoyer un message dans une conversation
     @PostMapping("/{conversationId}")
     public ResponseEntity<Conversation> chat(
             @PathVariable String conversationId,

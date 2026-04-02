@@ -26,6 +26,7 @@ public class ConversationController {
         this.conversationService = conversationService;
     }
 
+    // Endpoint pour créer une nouvelle conversation pour un utilisateur
     @PostMapping
     public ResponseEntity<Conversation> create(@RequestBody Map<String, String> body) {
         if (body.get("userId") == null || body.get("userId").isBlank()) {
@@ -34,16 +35,19 @@ public class ConversationController {
         return ResponseEntity.ok(conversationService.create(body.get("userId")));
     }
 
+    // Endpoint pour récupérer une conversation par son ID
     @GetMapping("/{id}")
     public ResponseEntity<Conversation> getById(@PathVariable String id) {
         return ResponseEntity.ok(conversationService.getById(id));
     }
 
+    // Endpoint pour récupérer toutes les conversations d'un utilisateur
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Conversation>> getByUserId(@PathVariable String userId) {
         return ResponseEntity.ok(conversationService.getByUserId(userId));
     }
 
+    // Endpoint pour ajouter un message à une conversation
     @PostMapping("/{id}/messages")
     public ResponseEntity<Conversation> addMessage(
             @PathVariable String id,

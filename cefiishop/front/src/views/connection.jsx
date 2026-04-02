@@ -11,10 +11,12 @@ import {
     Alert,
     CircularProgress,
 } from '@mui/material'
-import { login } from '../api/authApi'
+import { login as loginApi } from '../api/authApi'
+import { useAuth } from '../context/AuthContext'
 
 export default function Connection() {
     const navigate = useNavigate()
+    const { login } = useAuth()
     const [formData, setFormData] = useState({ email: '', password: '' })
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
@@ -30,8 +32,8 @@ export default function Connection() {
         setLoading(true)
 
         try {
-            const userData = await login({ mail: formData.email, password: formData.password })
-            localStorage.setItem('user', JSON.stringify(userData))
+            const userData = await loginApi({ mail: formData.email, password: formData.password })
+            login(userData)
             navigate('/')
         } catch (err) {
             console.error(err)

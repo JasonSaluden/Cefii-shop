@@ -1,3 +1,4 @@
+import React from 'react'
 import {
     Container,
     Table,
@@ -14,18 +15,49 @@ import {
     Card,
     CardContent,
     IconButton,
+    Alert,
+    CircularProgress,
     useTheme,
     useMediaQuery,
 } from '@mui/material'
 import { Delete as DeleteIcon, Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
+import { createOrder } from '../api/orderApi'
 
 function Cart() {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
     const navigate = useNavigate()
-    const { cartItems, removeFromCart, updateQuantity } = useCart()
+    const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart()
+    const { user } = useAuth()
+    const [orderSuccess, setOrderSuccess] = React.useState(false)
+    const [orderError, setOrderError] = React.useState('')
+    const [ordering, setOrdering] = React.useState(false)
+
+    const handleCheckout = async () => {
+        if (!user) {
+            navigate('/connection')
+            return
+        }
+        setOrderError('')
+        setOrdering(true)
+        try {
+            const orderLines = cartItems.map(item => ({
+                productId: item.idProduct,
+                quantite: item.quantity,
+                prixUnitaire: item.prix,
+            }))
+            await createOrder(user.id, { orderLines })
+            clearCart()
+            setOrderSuccess(true)
+        } catch {
+            setOrderError('Une erreur est survenue lors de la commande.')
+        } finally {
+            setOrdering(false)
+        }
+    }
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.prix * item.quantity, 0)
     const shipping = subtotal > 50 ? 0 : 9.99
@@ -42,7 +74,19 @@ function Cart() {
                     Votre Panier
                 </Typography>
 
-                {cartItems.length === 0 ? (
+                {orderSuccess ? (
+                    <Box sx={{ textAlign: 'center', py: 6 }}>
+                        <Alert severity="success" sx={{ mb: 3, justifyContent: 'center' }}>
+                            Commande passée avec succès ! Merci pour votre achat.
+                        </Alert>
+                        <Button variant="contained" sx={{ backgroundColor: theme.palette.primary.main }} onClick={() => navigate('/products')}>
+                            Continuer le shopping
+                        </Button>
+                        <Button variant="outlined" sx={{ ml: 2, borderColor: theme.palette.primary.main, color: theme.palette.primary.main }} onClick={() => navigate('/profile')}>
+                            Voir mes commandes
+                        </Button>
+                    </Box>
+                ) : cartItems.length === 0 ? (
                     <Box sx={{ textAlign: 'center', py: 6 }}>
                         <Typography variant="h6" color="textSecondary" sx={{ mb: 3 }}>
                             Votre panier est vide
@@ -178,10 +222,12 @@ function Cart() {
                                         </Typography>
                                     </Box>
 
+                                    {orderError && <Alert severity="error" sx={{ mb: 2 }}>{orderError}</Alert>}
                                     <Button
                                         fullWidth
                                         variant="contained"
-                                        onClick={() => navigate('/connection')}
+                                        onClick={handleCheckout}
+                                        disabled={ordering}
                                         sx={{
                                             backgroundColor: theme.palette.primary.main,
                                             mb: 2,
@@ -190,7 +236,7 @@ function Cart() {
                                             '&:hover': { backgroundColor: theme.palette.primary.dark },
                                         }}
                                     >
-                                        Procéder à la commande
+                                        {ordering ? <CircularProgress size={22} sx={{ color: 'white' }} /> : user ? 'Commander' : 'Se connecter pour commander'}
                                     </Button>
 
                                     <Button

@@ -23,11 +23,13 @@ public class IALogController {
         this.iaLogService = iaLogService;
     }
 
+    // Endpoint pour enregistrer un log de conversation avec l'IA
     @PostMapping
     public ResponseEntity<IALog> save(@RequestBody IALog log) {
         return ResponseEntity.ok(iaLogService.save(log));
     }
 
+    // Endpoint pour récupérer les logs d'une conversation spécifique
     @GetMapping("/conversation/{conversationId}")
     public ResponseEntity<List<IALog>> getByConversationId(@PathVariable String conversationId) {
         return ResponseEntity.ok(iaLogService.getByConversationId(conversationId));

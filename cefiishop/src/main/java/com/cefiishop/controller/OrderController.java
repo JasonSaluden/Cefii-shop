@@ -30,6 +30,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    // Endpoint pour créer une nouvelle commande pour un utilisateur donné 
     @PostMapping("/users/{userId}")
     public ResponseEntity<OrderResponse> createOrder(
             @PathVariable Integer userId,
@@ -37,21 +38,25 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(userId, request));
     }
 
+    // Endpoint pour récupérer une commande par son ID
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable Integer id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
+    // Endpoint pour récupérer toutes les commandes d'un utilisateur donné
     @GetMapping("/users/{userId}")
     public ResponseEntity<List<OrderResponse>> getUserOrders(@PathVariable Integer userId) {
         return ResponseEntity.ok(orderService.getUserOrders(userId));
     }
 
+    // Endpoint pour récupérer toutes les commandes (si besoin pour un compte admin)
     @GetMapping
     public ResponseEntity<List<OrderResponse>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
+    // Endpoint pour mettre à jour le statut d'une commande (ex: en cours, expédiée, livrée, annulée)
     @PutMapping("/{id}/status")
     public ResponseEntity<OrderResponse> updateOrderStatus(
             @PathVariable Integer id,
@@ -59,6 +64,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, request.getStatus()));
     }
 
+    // Endpoint pour supprimer une commande (si besoin pour un compte admin)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
         orderService.deleteOrder(id);
