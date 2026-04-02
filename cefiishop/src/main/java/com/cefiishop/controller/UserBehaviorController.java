@@ -21,10 +21,11 @@ public class UserBehaviorController {
     }
 
     @PostMapping("/{userId}/view/{productId}")
-    public ResponseEntity<UserBehavior> addProductView(
+    public ResponseEntity<Void> addProductView(
             @PathVariable Integer userId,
             @PathVariable Integer productId) {
-        return ResponseEntity.ok(userBehaviorService.addProductView(userId, productId));
+        userBehaviorService.addProductView(userId, productId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{userId}")

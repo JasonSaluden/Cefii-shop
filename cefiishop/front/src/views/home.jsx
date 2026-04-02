@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import SearchBar from '../components/SearchBar'
 import { getAllCategories } from '../api/categoryApi'
 import { getAllProducts } from '../api/productApi'
+import { getHomeRecommendations } from '../api/userBehavior'
 import productImages from '../assets/productImages'
 
 const slides = [
@@ -46,12 +47,20 @@ function Home() {
     const [current, setCurrent] = useState(0)
     const [categories, setCategories] = useState([])
     const [categoryImages, setCategoryImages] = useState({})
+    const [suggestions, setSuggestions] = useState([])
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrent((prev) => (prev + 1) % slides.length)
         }, 4500)
         return () => clearInterval(timer)
+    }, [])
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user') || 'null')
+        if (user?.id) {
+            getHomeRecommendations(user.id).then(setSuggestions).catch(() => {})
+        }
     }, [])
 
     useEffect(() => {
@@ -276,6 +285,7 @@ function Home() {
                                 height="160"
                                 image={categoryImages[cat.idCategory] || 'https://placehold.co/300x160?text=Catégorie'}
                                 alt={cat.nom}
+                                
                                 onError={(e) => { e.target.src = 'https://placehold.co/300x160?text=Catégorie' }}
                                 sx={{ objectFit: 'cover' }}
                             />
@@ -300,6 +310,71 @@ function Home() {
                     ))}
                 </Box>
             </Container>
+
+            {/* === SUGGESTIONS PERSONNALISÉES === */}
+            {suggestions.length > 0 && (
+                <Container maxWidth="lg" sx={{ mb: 8 }}>
+                    <Typography
+                        variant="h3"
+                        sx={{
+                            fontWeight: 700,
+                            mb: 4,
+                            textAlign: 'center',
+                            color: theme.palette.primary.main,
+                        }}
+                    >
+                        Suggestions pour vous
+                    </Typography>
+                    <Box
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
+                            gap: 3,
+                        }}
+                    >
+                        {suggestions.map((product) => (
+                            <Card
+                                key={product.idProduct}
+                                onClick={() => navigate(`/products/${product.idProduct}`)}
+                                sx={{
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        transform: 'translateY(-8px)',
+                                        boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
+                                    },
+                                    borderRadius: 2,
+                                    overflow: 'hidden',
+                                }}
+                            >
+                                <CardMedia
+                                    component="img"
+                                    height="160"
+                                    image={productImages[product.idProduct] || 'https://placehold.co/300x160?text=Produit'}
+                                    alt={product.nom}
+                                    onError={(e) => { e.target.src = 'https://placehold.co/300x160?text=Produit' }}
+                                    sx={{ objectFit: 'cover' }}
+                                />
+                                <CardContent sx={{ backgroundColor: '#f5f5f5', py: 2 }}>
+                                    <Typography
+                                        variant="subtitle2"
+                                        sx={{ fontWeight: 600, color: theme.palette.primary.main }}
+                                        noWrap
+                                    >
+                                        {product.nom}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{ fontWeight: 600, color: theme.palette.secondary.main }}
+                                    >
+                                        {product.prix.toFixed(2)}€
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </Box>
+                </Container>
+            )}
         </Box>
     )
 }

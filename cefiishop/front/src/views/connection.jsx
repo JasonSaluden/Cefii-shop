@@ -30,7 +30,8 @@ export default function Connection() {
         setLoading(true)
 
         try {
-            await login({ mail: formData.email, password: formData.password })
+            const userData = await login({ mail: formData.email, password: formData.password })
+            localStorage.setItem('user', JSON.stringify(userData))
             navigate('/')
         } catch (err) {
             console.error(err)

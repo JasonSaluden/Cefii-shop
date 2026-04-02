@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
     Container,
@@ -14,6 +14,7 @@ import {
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material'
 import { useTheme } from '@mui/material/styles'
 import { getProductById, getRecommendations } from '../api/productApi'
+import { trackProductView } from '../api/userBehavior'
 import { getProductImage } from '../assets/productImages'
 import { useCart } from '../context/CartContext'
 
@@ -25,6 +26,7 @@ export default function ProductDetail() {
     const [product, setProduct] = useState(null)
     const [recommendations, setRecommendations] = useState([])
     const [loading, setLoading] = useState(true)
+    const trackedProductRef = useRef(null)
 
     useEffect(() => {
         Promise.all([getProductById(id), getRecommendations(id)])
@@ -33,6 +35,12 @@ export default function ProductDetail() {
                 setRecommendations(recs.slice(0, 4))
             })
             .finally(() => setLoading(false))
+
+        const user = JSON.parse(localStorage.getItem('user') || 'null')
+        if (user?.id && id && trackedProductRef.current !== id) {
+            trackedProductRef.current = id
+            trackProductView(user.id, parseInt(id)).catch(() => {})
+        }
     }, [id])
 
     if (loading) {

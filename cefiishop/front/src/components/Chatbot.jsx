@@ -13,15 +13,19 @@ import { Close as CloseIcon, Comment as CommentIcon } from '@mui/icons-material'
 import { createConversation, sendMessage as sendChatMessage } from '../api/chatApi'
 
 function getOrCreateUserId() {
-    let userId = localStorage.getItem('chatbot_user_id')
+    const user = JSON.parse(localStorage.getItem('user') || 'null')
+    if (user?.id) {
+        return user.id.toString()
+    }
+    let userId = localStorage.getItem('chat_user_id')
     if (!userId) {
         userId = 'user_' + Math.random().toString(36).slice(2, 11)
-        localStorage.setItem('chatbot_user_id', userId)
+        localStorage.setItem('chat_user_id', userId)
     }
     return userId
 }
 
-export default function Chatbot({ title = "Assistant DragonShop", placeholder = "Posez une question...", collapsedInitially = true }) {
+export default function Chatbot({ title = "Assistant", placeholder = "Posez une question...", collapsedInitially = true }) {
     const theme = useTheme()
     const [open, setOpen] = useState(!collapsedInitially)
     const [messages, setMessages] = useState([

@@ -16,31 +16,6 @@ services:
       timeout: 5s
       retries: 5
 
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11435:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-
-  ollama-init:
-    image: ollama/ollama:latest
-    depends_on:
-      - ollama
-    environment:
-      OLLAMA_HOST: http://ollama:11434
-    entrypoint: >
-      /bin/sh -c "
-        until ollama list > /dev/null 2>&1; do
-          echo 'Attente de Ollama...';
-          sleep 2;
-        done;
-        ollama pull phi3:mini &&
-        ollama pull nomic-embed-text
-      "
-    volumes:
-      - ollama_data:/root/.ollama
-
   app:
     image: maven:3.9-eclipse-temurin-21
     working_dir: /app
@@ -52,22 +27,21 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      ollama:
-        condition: service_started
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cefiishop?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: cefiishop_user
       SPRING_DATASOURCE_PASSWORD: cefiishop_pass
       SPRING_DATA_MONGODB_URI: ${MONGODB_ATLAS_URI}
-      SPRING_AI_OLLAMA_BASE_URL: http://ollama:11434
-      SPRING_AI_OLLAMA_CHAT_MODEL: phi3:mini
+      SPRING_AI_OPENAI_BASE_URL: https://api.groq.com/openai
+      SPRING_AI_OPENAI_API_KEY: ${GROQ_API_KEY}
+      SPRING_AI_OPENAI_CHAT_OPTIONS_MODEL: llama-3.1-8b-instant
       SPRING_AI_VECTORSTORE_MONGODB_URI: ${MONGODB_ATLAS_URI}
+      GROQ_API_KEY: ${GROQ_API_KEY}
     command: mvn spring-boot:run
 
 volumes:
   db_data:
   maven_cache:
-  ollama_data:
 
 networks:
   default:
