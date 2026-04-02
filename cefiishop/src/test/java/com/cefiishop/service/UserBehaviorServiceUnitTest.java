@@ -19,17 +19,22 @@ public class UserBehaviorServiceUnitTest {
     @Mock
     private UserBehaviorRepository userBehaviorRepository;
 
+    @Mock
+    private org.springframework.data.mongodb.core.MongoTemplate mongoTemplate;
+
     @InjectMocks
     private UserBehaviorService userBehaviorService;
 
     @Test
     void addProductView_createsNewBehaviorIfMissing() {
-        when(userBehaviorRepository.findByUserId(10)).thenReturn(Optional.empty());
-        when(userBehaviorRepository.save(org.mockito.ArgumentMatchers.any())).thenAnswer(i -> i.getArgument(0));
+        // call method under test (returns void)
+        userBehaviorService.addProductView(10, 99);
 
-        UserBehavior res = userBehaviorService.addProductView(10, 99);
-        assertEquals(10, res.getUserId());
-        assertTrue(res.getViewedProducts().stream().anyMatch(v -> v.getProductId().equals(99)));
+        // verify mongoTemplate.upsert was used to perform the upsert
+        org.mockito.Mockito.verify(mongoTemplate)
+                .upsert(org.mockito.ArgumentMatchers.any(org.springframework.data.mongodb.core.query.Query.class),
+                        org.mockito.ArgumentMatchers.any(org.springframework.data.mongodb.core.query.Update.class),
+                        org.mockito.ArgumentMatchers.eq(UserBehavior.class));
     }
 
     @Test
