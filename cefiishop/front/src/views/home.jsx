@@ -60,7 +60,7 @@ function Home() {
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user') || 'null')
         if (user?.id) {
-            getHomeRecommendations(user.id).then(setSuggestions).catch(() => {})
+            getHomeRecommendations(user.id).then(setSuggestions).catch(() => { })
         }
     }, [])
 
@@ -294,7 +294,7 @@ function Home() {
                                 height="160"
                                 image={categoryImages[cat.idCategory] || 'https://placehold.co/300x160?text=Catégorie'}
                                 alt={cat.nom}
-                                
+
                                 onError={(e) => { e.target.src = 'https://placehold.co/300x160?text=Catégorie' }}
                                 sx={{ objectFit: 'cover' }}
                             />
