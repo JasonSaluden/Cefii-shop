@@ -27,8 +27,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    env_file:
-      - ./.env
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cefiishop?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: cefiishop_user
