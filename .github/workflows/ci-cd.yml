@@ -55,7 +55,6 @@ jobs:
       - name: Build with Maven
         working-directory: ./cefiishop
         env:
-          SPRING_PROFILES_ACTIVE: ci
           SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/cefiishop?allowPublicKeyRetrieval=true&useSSL=false
           SPRING_DATASOURCE_USERNAME: cefiishop_user
           SPRING_DATASOURCE_PASSWORD: cefiishop_pass
@@ -65,7 +64,6 @@ jobs:
       - name: Run Tests
         working-directory: ./cefiishop
         env:
-          SPRING_PROFILES_ACTIVE: ci
           SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/cefiishop?allowPublicKeyRetrieval=true&useSSL=false
           SPRING_DATASOURCE_USERNAME: cefiishop_user
           SPRING_DATASOURCE_PASSWORD: cefiishop_pass
