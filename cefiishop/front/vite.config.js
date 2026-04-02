@@ -16,5 +16,9 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/setupTests.js',
+    isolate: true,
+    threads: true,
+    maxThreads: 1,
+    minThreads: 1,
   },
 })
