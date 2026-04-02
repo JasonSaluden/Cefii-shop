@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import Olivier from '../assets/logo.png'
 import {
     AppBar,
@@ -14,25 +15,48 @@ import {
     MenuItem,
     Badge,
     Button,
+    Divider,
+    Typography,
 } from '@mui/material'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
+import { getAllCategories } from '../api/categoryApi'
+
+const navLinkSx = {
+    color: '#f0f0f0',
+    textDecoration: 'none',
+    fontWeight: 500,
+    transition: 'color 0.3s',
+    '&:hover': { color: '#D4AF37' },
+}
 
 export default function Navbar() {
     const { totalItems } = useCart()
     const { user, logout } = useAuth()
     const navigate = useNavigate()
-    // Menu hamburger mobile
-    const [anchorEl, setAnchorEl] = React.useState(null)
-    const open = Boolean(anchorEl)
 
+    // Catégories
+    const [categories, setCategories] = useState([])
+    useEffect(() => {
+        getAllCategories().then(setCategories).catch(() => {})
+    }, [])
+
+    // Menu hamburger mobile
+    const [anchorEl, setAnchorEl] = useState(null)
+    const open = Boolean(anchorEl)
     const handleMenuOpen = (event) => setAnchorEl(event.currentTarget)
-    const handleMenuClose = () => setAnchorEl(null)
+    const handleMenuClose = () => { setAnchorEl(null); setShowMobileCats(false) }
+
+    // Menu déroulant catégories (desktop)
+    const [anchorElCat, setAnchorElCat] = useState(null)
+    const catOpen = Boolean(anchorElCat)
+
+    // Sous-menu catégories mobile
+    const [showMobileCats, setShowMobileCats] = useState(false)
 
     // Menu déroulant icône profil
-    const [anchorElUser, setAnchorElUser] = React.useState(null)
+    const [anchorElUser, setAnchorElUser] = useState(null)
     const userMenuOpen = Boolean(anchorElUser)
-
     const handleUserMenuOpen = (event) => setAnchorElUser(event.currentTarget)
     const handleUserMenuClose = () => setAnchorElUser(null)
 
@@ -43,17 +67,17 @@ export default function Navbar() {
         navigate('/')
     }
 
-    const navLinkSx = {
-        color: '#f0f0f0',
-        textDecoration: 'none',
-        fontWeight: 500,
-        transition: 'color 0.3s',
-        '&:hover': { color: '#D4AF37' },
+    const handleCatNavigate = (nom) => {
+        setAnchorElCat(null)
+        setAnchorEl(null)
+        setShowMobileCats(false)
+        navigate(nom ? `/products?category=${encodeURIComponent(nom)}` : '/products')
     }
 
     return (
         <AppBar position="fixed" sx={{ backgroundColor: '#0B1020' }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+
                 {/* Logo */}
                 <Link
                     component={RouterLink}
@@ -76,11 +100,39 @@ export default function Navbar() {
                 {/* Desktop Navigation */}
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3, alignItems: 'center' }}>
                     <Link component={RouterLink} to="/" sx={navLinkSx}>Accueil</Link>
-                    <Link component={RouterLink} to="/products" sx={navLinkSx}>Produits</Link>
+
+                    {/* Dropdown catégories */}
+                    <Button
+                        onClick={(e) => setAnchorElCat(e.currentTarget)}
+                        endIcon={
+                            <KeyboardArrowDownIcon sx={{ transition: 'transform 0.2s', transform: catOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                        }
+                        sx={{ color: '#f0f0f0', fontWeight: 500, textTransform: 'none', fontSize: '1rem', p: 0, minWidth: 0, '&:hover': { color: '#D4AF37', backgroundColor: 'transparent' } }}
+                    >
+                        Produits
+                    </Button>
+                    <Menu
+                        anchorEl={anchorElCat}
+                        open={catOpen}
+                        onClose={() => setAnchorElCat(null)}
+                        slotProps={{ paper: { sx: { mt: 1, minWidth: 200, borderRadius: 2, boxShadow: '0 8px 24px rgba(0,0,0,0.15)' } } }}
+                    >
+                        <MenuItem onClick={() => handleCatNavigate(null)} sx={{ fontWeight: 600 }}>
+                            Tous les produits
+                        </MenuItem>
+                        <Divider />
+                        {categories.map((cat) => (
+                            <MenuItem key={cat.idCategory} onClick={() => handleCatNavigate(cat.nom)} sx={{ '&:hover': { color: '#8B1E2D' } }}>
+                                {cat.nom}
+                            </MenuItem>
+                        ))}
+                    </Menu>
                 </Box>
 
                 {/* Icons */}
                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+
+                    {/* Menu profil */}
                     <IconButton onClick={handleUserMenuOpen} sx={{ color: '#D4AF37' }}>
                         <PersonIcon />
                     </IconButton>
@@ -102,6 +154,8 @@ export default function Navbar() {
                             ]
                         )}
                     </Menu>
+
+                    {/* Panier */}
                     <IconButton
                         component={RouterLink}
                         to="/cart"
@@ -112,16 +166,13 @@ export default function Navbar() {
                         </Badge>
                     </IconButton>
 
-                    {/* Mobile Menu Button */}
-                    <IconButton
-                        sx={{ display: { md: 'none' }, color: '#D4AF37' }}
-                        onClick={handleMenuOpen}
-                    >
+                    {/* Bouton hamburger mobile */}
+                    <IconButton sx={{ display: { md: 'none' }, color: '#D4AF37' }} onClick={handleMenuOpen}>
                         <MenuIcon />
                     </IconButton>
                 </Box>
 
-                {/* Mobile Menu Dropdown */}
+                {/* Menu mobile */}
                 <Menu
                     anchorEl={anchorEl}
                     open={open}
@@ -129,7 +180,25 @@ export default function Navbar() {
                     sx={{ display: { md: 'none' } }}
                 >
                     <MenuItem component={RouterLink} to="/" onClick={handleMenuClose}>Accueil</MenuItem>
-                    <MenuItem component={RouterLink} to="/products" onClick={handleMenuClose}>Produits</MenuItem>
+
+                    {/* Produits + sous-menu catégories */}
+                    <MenuItem onClick={() => setShowMobileCats(prev => !prev)} sx={{ fontWeight: 600 }}>
+                        Produits
+                        <KeyboardArrowDownIcon sx={{ ml: 'auto', transition: 'transform 0.2s', transform: showMobileCats ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                    </MenuItem>
+                    {showMobileCats && (
+                        <Box sx={{ pl: 2, borderLeft: '3px solid #D4AF37', ml: 2 }}>
+                            <MenuItem onClick={() => handleCatNavigate(null)}>
+                                <Typography variant="body2" fontWeight={600}>Tous les produits</Typography>
+                            </MenuItem>
+                            {categories.map((cat) => (
+                                <MenuItem key={cat.idCategory} onClick={() => handleCatNavigate(cat.nom)}>
+                                    <Typography variant="body2">{cat.nom}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Box>
+                    )}
+
                     <MenuItem component={RouterLink} to="/cart" onClick={handleMenuClose}>Panier</MenuItem>
                     {user ? (
                         [
@@ -143,6 +212,7 @@ export default function Navbar() {
                         ]
                     )}
                 </Menu>
+
             </Toolbar>
         </AppBar>
     )

@@ -94,7 +94,7 @@ export default function Products() {
 
             <Grid container spacing={4}>
                 {/* Sidebar Filtres */}
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 3 }}>
                     <Paper
                         sx={{
                             p: 3,
@@ -185,7 +185,7 @@ export default function Products() {
                 </Grid>
 
                 {/* Grille Produits */}
-                <Grid item xs={12} md={8}>
+                <Grid size={{ xs: 12, md: 9 }}>
                     <Box sx={{ mb: 2 }}>
                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                             {filteredProducts.length} produit(s) trouvé(s)
@@ -195,7 +195,7 @@ export default function Products() {
                     <Grid container spacing={2.5} sx={{ justifyContent: 'center' }}>
                         {filteredProducts.length > 0 ? (
                             filteredProducts.map((product) => (
-                                <Grid item xs={12} sm={6} lg={4} key={product.idProduct} sx={{ display: 'flex' }}>
+                                <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={product.idProduct} sx={{ display: 'flex' }}>
                                     <Card
                                         onClick={() => navigate(`/products/${product.idProduct}`)}
                                         sx={{
@@ -310,7 +310,7 @@ export default function Products() {
                                 </Grid>
                             ))
                         ) : (
-                            <Grid item xs={12}>
+                            <Grid size={12}>
                                 <Paper
                                     sx={{
                                         p: 4,
