@@ -85,6 +85,7 @@ function Home() {
             <Container maxWidth="lg">
                 <SearchBar
                     placeholder="Chercher un produit, catégorie..."
+                    submitOnly
                     onSearch={(query) => navigate(`/products${query ? `?search=${encodeURIComponent(query)}` : ''}`)}
                 />
             </Container>

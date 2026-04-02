@@ -4,13 +4,14 @@ import SearchIcon from '@mui/icons-material/Search'
 
 export default function SearchBar({
     placeholder = 'Chercher un produit...',
-    onSearch = () => { }
+    onSearch = () => { },
+    submitOnly = false,
 }) {
     const [value, setValue] = useState('')
 
     const handleChange = (e) => {
         setValue(e.target.value)
-        onSearch(e.target.value)
+        if (!submitOnly) onSearch(e.target.value)
     }
 
     const handleKeyPress = (e) => {
