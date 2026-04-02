@@ -28,6 +28,7 @@ public class OrderLineController {
         this.orderLineService = orderLineService;
     }
 
+    // Endpoint pour ajouter une ligne de commande à une commande existante
     @PostMapping("/orders/{orderId}")
     public ResponseEntity<OrderLineResponse> addOrderLine(
             @PathVariable Integer orderId,
@@ -35,16 +36,19 @@ public class OrderLineController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderLineService.addOrderLine(orderId, request));
     }
 
+    // Endpoint pour récupérer toutes les lignes de commande d'une commande donnée
     @GetMapping("/orders/{orderId}")
     public ResponseEntity<List<OrderLineResponse>> getOrderLinesByOrderId(@PathVariable Integer orderId) {
         return ResponseEntity.ok(orderLineService.getOrderLinesByOrderId(orderId));
     }
 
+    // Endpoint pour récupérer une ligne de commande par son ID
     @GetMapping("/{id}")
     public ResponseEntity<OrderLineResponse> getOrderLineById(@PathVariable Integer id) {
         return ResponseEntity.ok(orderLineService.getOrderLineById(id));
     }
 
+    // Endpoint pour supprimer une ligne de commande 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrderLine(@PathVariable Integer id) {
         orderLineService.deleteOrderLine(id);

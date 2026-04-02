@@ -27,6 +27,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    // Endpoints pour gérer les utilisateurs (CRUD)
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.getUserById(id));

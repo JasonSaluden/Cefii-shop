@@ -9,29 +9,34 @@ import Register from './views/register'
 import Home from './views/home'
 import Cart from './views/cart'
 import ProductDetail from './views/productDetail'
+import Profile from './views/profile'
 import { CartProvider } from './context/CartContext'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   return (
-    <CartProvider>
-    <BrowserRouter>
-      <div className="App">
-        <Navbar />
-        <Toolbar /> {/* Add spacing for fixed AppBar */}
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/connection" element={<Connection />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-          </Routes>
-        </main>
-        <Chatbot />
-      </div>
-    </BrowserRouter>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <div className="App">
+            <Navbar />
+            <Toolbar /> {/* Add spacing for fixed AppBar */}
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/connection" element={<Connection />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/profile" element={<Profile />} />
+              </Routes>
+            </main>
+            <Chatbot />
+          </div>
+        </BrowserRouter>
+      </CartProvider>
+    </AuthProvider>
   )
 }
 

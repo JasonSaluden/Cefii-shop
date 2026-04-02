@@ -24,6 +24,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    // Endpoints pour récupérer les catégories
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());

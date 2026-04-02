@@ -23,6 +23,7 @@ public class HomeController {
         this.recommendationService = recommendationService;
     }
 
+    // Endpoint pour récupérer les recommandations personnalisées pour un utilisateur
     @GetMapping("/recommendations/{userId}")
     public ResponseEntity<List<ProductResponse>> getRecommendations(@PathVariable Integer userId) {
         return ResponseEntity.ok(recommendationService.getPersonalizedRecommantations(userId));
