@@ -121,6 +121,7 @@
 
 .footer-section {
     animation: fadeInUp 0.5s ease forwards;
+    text-align: left;
 }
 
 .footer-brand {
@@ -348,8 +349,7 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    background: var(--color-accent);
-    color: var(--color-primary);
+    color: white;
     border-radius: var(--radius-md);
     font-size: 1rem;
 }
@@ -405,12 +405,11 @@
 
     .footer-bottom-content {
         flex-direction: column;
-        justify-content: center;
-        text-align: center;
+        align-items: flex-start;
     }
 
     .payment-methods {
-        justify-content: center;
+        justify-content: flex-start;
     }
 }
 

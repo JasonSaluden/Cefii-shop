@@ -106,8 +106,11 @@ function Home() {
             <Box sx={{ mt: 4 }} />
             {recommendations.length > 0 && (
                 <Container maxWidth="lg" sx={{ mb: 1 }}>
-                    <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.main, textAlign: 'center' }}>
-                        Recommandés pour vous
+                    <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.main }}>
+                        Recommandé pour vous
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 700, color: theme.palette.primary.main }}>
+                        D'après vos récentes recherches
                     </Typography>
                 </Container>
             )}
@@ -227,7 +230,7 @@ function Home() {
 
             {/* === CATEGORIES === */}
             <Container maxWidth="lg" sx={{ mb: 8 }}>
-                <Typography variant="h3" sx={{ fontWeight: 700, mb: 4, textAlign: 'center', color: theme.palette.primary.main }}>
+                <Typography variant="h3" sx={{ fontWeight: 700, mb: 4, color: theme.palette.primary.main }}>
                     Nos catégories
                 </Typography>
                 <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fit, minmax(180px, 1fr))', gap: 3 }}>
@@ -245,7 +248,7 @@ function Home() {
                                 onError={(e) => { e.target.src = 'https://placehold.co/300x160?text=Catégorie' }}
                                 sx={{ objectFit: 'cover' }}
                             />
-                            <CardContent sx={{ textAlign: 'center', backgroundColor: '#f5f5f5', py: 2 }}>
+                            <CardContent sx={{ backgroundColor: '#f5f5f5', py: 2 }}>
                                 <Typography variant="subtitle1" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
                                     {cat.nom}
                                 </Typography>
