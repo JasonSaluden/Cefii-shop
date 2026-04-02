@@ -6,6 +6,7 @@ import {
     CardContent,
     Typography,
     Box,
+    Button,
     IconButton,
     useTheme,
     useMediaQuery,
@@ -13,27 +14,27 @@ import {
 import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import SearchBar from '../components/SearchBar'
 import { getAllCategories } from '../api/categoryApi'
 import { getAllProducts } from '../api/productApi'
 import { getHomeRecommendations } from '../api/userBehavior'
+import { useAuth } from '../context/AuthContext'
 import productImages from '../assets/productImages'
 
-const slides = [
+const staticSlides = [
     {
-        id: 1,
+        id: 's1',
         title: 'Équipez votre dragon pour l\'aventure',
         subtitle: 'Selles, harnais, armures — tout pour voler en sécurité',
         bg: 'https://images.pexels.com/photos/5691635/pexels-photo-5691635.jpeg?auto=compress&cs=tinysrgb&w=1600',
     },
     {
-        id: 2,
+        id: 's2',
         title: 'Prenez soin de votre compagnon',
         subtitle: 'Produits d\'hygiène et de soin adaptés aux dragons',
         bg: 'https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg?auto=compress&cs=tinysrgb&w=1600',
     },
     {
-        id: 3,
+        id: 's3',
         title: 'Nouveautés & Promos',
         subtitle: 'Découvrez nos dernières offres pour cavaliers et dragons',
         bg: 'https://images.pexels.com/photos/286973/pexels-photo-286973.jpeg?auto=compress&cs=tinysrgb&w=1600',
@@ -44,24 +45,20 @@ function Home() {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
     const navigate = useNavigate()
+    const { user } = useAuth()
+
     const [current, setCurrent] = useState(0)
     const [categories, setCategories] = useState([])
     const [categoryImages, setCategoryImages] = useState({})
-    const [suggestions, setSuggestions] = useState([])
+    const [recommendations, setRecommendations] = useState([])
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrent((prev) => (prev + 1) % slides.length)
-        }, 4500)
-        return () => clearInterval(timer)
-    }, [])
-
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user') || 'null')
         if (user?.id) {
-            getHomeRecommendations(user.id).then(setSuggestions).catch(() => {})
+            getHomeRecommendations(user.id).then(setRecommendations).catch(() => {})
+        } else {
+            setRecommendations([])
         }
-    }, [])
+    }, [user])
 
     useEffect(() => {
         getAllCategories().then(setCategories)
@@ -76,234 +73,197 @@ function Home() {
         })
     }, [])
 
+    // Slides dynamiques si recommandations disponibles, sinon slides statiques
+    const slides = recommendations.length > 0
+        ? recommendations.map((p) => ({
+            id: p.idProduct,
+            title: p.nom,
+            subtitle: `${p.categoryNom} — ${p.prix.toFixed(2)} €`,
+            bg: productImages[p.idProduct] || 'https://placehold.co/1600x500?text=Produit',
+            productId: p.idProduct,
+        }))
+        : staticSlides
+
+    // Reset index si le nombre de slides change
+    useEffect(() => {
+        setCurrent(0)
+    }, [slides.length])
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrent((prev) => (prev + 1) % slides.length)
+        }, 4500)
+        return () => clearInterval(timer)
+    }, [slides.length])
+
     const handlePrev = () => setCurrent((current - 1 + slides.length) % slides.length)
     const handleNext = () => setCurrent((current + 1) % slides.length)
 
     return (
         <Box component="section">
-            {/* === SEARCH BAR === */}
-            <Container maxWidth="lg">
-                <SearchBar
-                    placeholder="Chercher un produit, catégorie..."
-                    submitOnly
-                    onSearch={(query) => navigate(`/products${query ? `?search=${encodeURIComponent(query)}` : ''}`)}
-                />
+            {/* Bouton recherche */}
+            <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+                <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => navigate('/products')}
+                    sx={{
+                        backgroundColor: '#0B1020',
+                        fontWeight: 600,
+                        px: 4,
+                        py: 1.5,
+                        borderRadius: 2,
+                        '&:hover': { backgroundColor: '#1a2240' },
+                    }}
+                >
+                    Rechercher un produit
+                </Button>
             </Container>
 
             {/* === CAROUSEL === */}
+            {recommendations.length > 0 && (
+                <Container maxWidth="lg" sx={{ mb: 1 }}>
+                    <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.main, textAlign: 'center' }}>
+                        Recommandés pour vous
+                    </Typography>
+                </Container>
+            )}
             <Box
                 sx={{
                     position: 'relative',
                     width: '90%',
                     mx: 'auto',
-                    height: isMobile ? '300px' : '500px',
-                    backgroundColor: '#1a1a1a',
-                    overflow: 'hidden',
+                    height: isMobile ? 'auto' : '420px',
                     borderRadius: '24px',
                     mb: 6,
                     mt: 2,
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-                    transition: 'box-shadow 0.3s ease-in-out',
-                    '&:hover': {
-                        boxShadow: '0 16px 48px rgba(207, 159, 114, 0.15)',
-                    },
+                    overflow: 'hidden',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+                    display: 'flex',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    backgroundColor: '#0B1020',
                 }}
             >
-                {/* Slide images */}
-                {slides.map((slide, idx) => (
-                    <Box
-                        key={slide.id}
-                        sx={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            backgroundImage: `url('${slide.bg}')`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            opacity: idx === current ? 1 : 0,
-                            transition: 'opacity 0.8s ease-in-out',
-                        }}
-                    />
-                ))}
-
-                {/* Gradient overlay */}
+                {/* Côté image */}
                 <Box
                     sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        background:
-                            'linear-gradient(135deg, rgba(139, 30, 45, 0.7) 0%, rgba(0,0,0,0.3) 100%)',
-                        zIndex: 1,
+                        width: isMobile ? '100%' : '55%',
+                        height: isMobile ? '240px' : '100%',
+                        flexShrink: 0,
+                        position: 'relative',
+                        overflow: 'hidden',
                     }}
-                />
+                >
+                    {slides.map((slide, idx) => (
+                        <Box
+                            key={slide.id}
+                            component="img"
+                            src={slide.bg}
+                            alt={slide.title}
+                            sx={{
+                                position: 'absolute',
+                                inset: 0,
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'contain',
+                                backgroundColor: '#111',
+                                opacity: idx === current ? 1 : 0,
+                                transition: 'opacity 0.8s ease-in-out',
+                            }}
+                        />
+                    ))}
+                </Box>
 
-                {/* Slide content */}
+                {/* Côté infos */}
                 <Box
                     sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        textAlign: 'center',
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        px: isMobile ? 3 : 5,
+                        py: isMobile ? 3 : 4,
                         color: '#fff',
-                        zIndex: 2,
-                        width: '90%',
                     }}
                 >
                     <Typography
-                        variant={isMobile ? 'h4' : 'h2'}
-                        sx={{
-                            fontWeight: 700,
-                            mb: 2,
-                            textShadow: '2px 2px 8px rgba(0,0,0,0.5)',
-                        }}
+                        variant={isMobile ? 'h5' : 'h4'}
+                        sx={{ fontWeight: 700, mb: 2, lineHeight: 1.3 }}
                     >
                         {slides[current].title}
                     </Typography>
                     <Typography
-                        variant={isMobile ? 'body2' : 'body1'}
-                        sx={{
-                            textShadow: '1px 1px 4px rgba(0,0,0,0.5)',
-                        }}
+                        variant="body1"
+                        sx={{ color: 'rgba(255,255,255,0.75)', mb: slides[current].productId ? 4 : 0 }}
                     >
                         {slides[current].subtitle}
                     </Typography>
+                    {slides[current].productId && (
+                        <Button
+                            variant="contained"
+                            onClick={() => navigate(`/products/${slides[current].productId}`)}
+                            sx={{ alignSelf: 'flex-start', backgroundColor: '#cf9f72', color: '#0B1020', fontWeight: 700, '&:hover': { backgroundColor: '#d4ad52' } }}
+                        >
+                            Voir le produit
+                        </Button>
+                    )}
+
+                    {/* Dots */}
+                    <Box sx={{ display: 'flex', gap: 1, mt: 4 }}>
+                        {slides.map((_, idx) => (
+                            <Box
+                                key={idx}
+                                onClick={() => setCurrent(idx)}
+                                sx={{
+                                    width: idx === current ? '24px' : '10px',
+                                    height: '10px',
+                                    borderRadius: '5px',
+                                    backgroundColor: idx === current ? '#cf9f72' : 'rgba(255,255,255,0.3)',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s',
+                                }}
+                            />
+                        ))}
+                    </Box>
                 </Box>
 
-                {/* Navigation Buttons */}
+                {/* Flèches */}
                 <IconButton
                     onClick={handlePrev}
-                    sx={{
-                        position: 'absolute',
-                        left: 20,
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        zIndex: 3,
-                        backgroundColor: 'rgba(207, 159, 114, 0.8)',
-                        color: '#fff',
-                        '&:hover': {
-                            backgroundColor: 'rgba(207, 159, 114, 1)',
-                        },
-                    }}
+                    sx={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', zIndex: 3, backgroundColor: 'rgba(207,159,114,0.8)', color: '#fff', '&:hover': { backgroundColor: 'rgba(207,159,114,1)' } }}
                 >
                     <ChevronLeftIcon />
                 </IconButton>
                 <IconButton
                     onClick={handleNext}
-                    sx={{
-                        position: 'absolute',
-                        right: 20,
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        zIndex: 3,
-                        backgroundColor: 'rgba(207, 159, 114, 0.8)',
-                        color: '#fff',
-                        '&:hover': {
-                            backgroundColor: 'rgba(207, 159, 114, 1)',
-                        },
-                    }}
+                    sx={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', zIndex: 3, backgroundColor: 'rgba(207,159,114,0.8)', color: '#fff', '&:hover': { backgroundColor: 'rgba(207,159,114,1)' } }}
                 >
                     <ChevronRightIcon />
                 </IconButton>
-
-                {/* Dots indicator */}
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        bottom: 20,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        display: 'flex',
-                        gap: 1,
-                        zIndex: 3,
-                    }}
-                >
-                    {slides.map((_, idx) => (
-                        <Box
-                            key={idx}
-                            onClick={() => setCurrent(idx)}
-                            sx={{
-                                width: '12px',
-                                height: '12px',
-                                borderRadius: '50%',
-                                backgroundColor:
-                                    idx === current ? '#cf9f72' : 'rgba(255,255,255,0.5)',
-                                cursor: 'pointer',
-                                transition: 'background-color 0.3s',
-                                '&:hover': {
-                                    backgroundColor: '#cf9f72',
-                                },
-                            }}
-                        />
-                    ))}
-                </Box>
             </Box>
 
-            {/* === CATEGORIES SECTION === */}
+            {/* === CATEGORIES === */}
             <Container maxWidth="lg" sx={{ mb: 8 }}>
-                <Typography
-                    variant="h3"
-                    sx={{
-                        fontWeight: 700,
-                        mb: 4,
-                        textAlign: 'center',
-                        color: theme.palette.primary.main,
-                    }}
-                >
-                    Nos rayons
+                <Typography variant="h3" sx={{ fontWeight: 700, mb: 4, textAlign: 'center', color: theme.palette.primary.main }}>
+                    Nos catégories
                 </Typography>
-
-                <Box
-                    sx={{
-                        display: 'grid',
-                        gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fit, minmax(180px, 1fr))',
-                        gap: 3,
-                    }}
-                >
+                <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fit, minmax(180px, 1fr))', gap: 3 }}>
                     {categories.map((cat) => (
                         <Card
                             key={cat.idCategory}
                             onClick={() => navigate(`/products?category=${encodeURIComponent(cat.nom)}`)}
-                            sx={{
-                                cursor: 'pointer',
-                                transition: 'all 0.3s ease',
-                                '&:hover': {
-                                    transform: 'translateY(-8px)',
-                                    boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
-                                },
-                                borderRadius: 2,
-                                overflow: 'hidden',
-                                height: '100%',
-                            }}
+                            sx={{ cursor: 'pointer', transition: 'all 0.3s ease', '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 12px 24px rgba(0,0,0,0.15)' }, borderRadius: 2, overflow: 'hidden', height: '100%' }}
                         >
                             <CardMedia
                                 component="img"
                                 height="160"
                                 image={categoryImages[cat.idCategory] || 'https://placehold.co/300x160?text=Catégorie'}
                                 alt={cat.nom}
-                                
                                 onError={(e) => { e.target.src = 'https://placehold.co/300x160?text=Catégorie' }}
                                 sx={{ objectFit: 'cover' }}
                             />
-                            <CardContent
-                                sx={{
-                                    textAlign: 'center',
-                                    backgroundColor: '#f5f5f5',
-                                    py: 2,
-                                }}
-                            >
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{
-                                        fontWeight: 600,
-                                        color: theme.palette.primary.main,
-                                    }}
-                                >
+                            <CardContent sx={{ textAlign: 'center', backgroundColor: '#f5f5f5', py: 2 }}>
+                                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
                                     {cat.nom}
                                 </Typography>
                             </CardContent>
@@ -311,71 +271,6 @@ function Home() {
                     ))}
                 </Box>
             </Container>
-
-            {/* === SUGGESTIONS PERSONNALISÉES === */}
-            {suggestions.length > 0 && (
-                <Container maxWidth="lg" sx={{ mb: 8 }}>
-                    <Typography
-                        variant="h3"
-                        sx={{
-                            fontWeight: 700,
-                            mb: 4,
-                            textAlign: 'center',
-                            color: theme.palette.primary.main,
-                        }}
-                    >
-                        Suggestions pour vous
-                    </Typography>
-                    <Box
-                        sx={{
-                            display: 'grid',
-                            gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
-                            gap: 3,
-                        }}
-                    >
-                        {suggestions.map((product) => (
-                            <Card
-                                key={product.idProduct}
-                                onClick={() => navigate(`/products/${product.idProduct}`)}
-                                sx={{
-                                    cursor: 'pointer',
-                                    transition: 'all 0.3s ease',
-                                    '&:hover': {
-                                        transform: 'translateY(-8px)',
-                                        boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
-                                    },
-                                    borderRadius: 2,
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                <CardMedia
-                                    component="img"
-                                    height="160"
-                                    image={productImages[product.idProduct] || 'https://placehold.co/300x160?text=Produit'}
-                                    alt={product.nom}
-                                    onError={(e) => { e.target.src = 'https://placehold.co/300x160?text=Produit' }}
-                                    sx={{ objectFit: 'cover' }}
-                                />
-                                <CardContent sx={{ backgroundColor: '#f5f5f5', py: 2 }}>
-                                    <Typography
-                                        variant="subtitle2"
-                                        sx={{ fontWeight: 600, color: theme.palette.primary.main }}
-                                        noWrap
-                                    >
-                                        {product.nom}
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{ fontWeight: 600, color: theme.palette.secondary.main }}
-                                    >
-                                        {product.prix.toFixed(2)}€
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </Box>
-                </Container>
-            )}
         </Box>
     )
 }
