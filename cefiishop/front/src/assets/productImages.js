@@ -19,13 +19,18 @@ import traducteur from './products/Traducteur.jpg'
 import viande from './products/Viande.webp'
 import volcan from './products/VolcanArtificiel.jpg'
 import gps from './products/gpsDragon.png'
+import securite from './products/securite.png'
+import entrainement from './products/entrainement.png'
+import transport from './products/transport.png'
+import bebeDragon from './products/bebe-dragon.png'
+import vetements from './products/vetements.png'
 
 const productImages = {
-    1:  selle,          // Selle de dragon renforcée
-    2:  harnais,        // Harnais de contrôle draconique
-    3:  armure,         // Armure d'écailles titanisées
-    7:  coupeGriffes,   // Coupe-griffes géant
-    9:  huile,          // Huile brillante pour écailles
+    1: selle,          // Selle de dragon renforcée
+    2: harnais,        // Harnais de contrôle draconique
+    3: armure,         // Armure d'écailles titanisées
+    7: coupeGriffes,   // Coupe-griffes géant
+    9: huile,          // Huile brillante pour écailles
     22: grotte,         // Grotte volcanique artificielle
     23: nid,            // Nid de repos en pierre
     24: tapisThermique, // Tapis thermique draconique
@@ -42,6 +47,11 @@ const productImages = {
     51: os,             // Os enrichis en calcium
     54: spot,           // Balise lumineuse nocturne
     68: tapisDragon,    // Tapis peau de dragon synthétique
+    69: securite,       // Système de sécurité draconique
+    70: entrainement,   // Entraînement draconique
+    71: transport,      // Service de transport draconique
+    72: bebeDragon,     // Bébé dragon
+    73: vetements,      // Vêtements draconiques
 }
 
 export const getProductImage = (product) =>

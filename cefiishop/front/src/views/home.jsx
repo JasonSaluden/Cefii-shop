@@ -18,6 +18,7 @@ import { getAllCategories } from '../api/categoryApi'
 import { getAllProducts } from '../api/productApi'
 import { getHomeRecommendations } from '../api/userBehavior'
 import productImages from '../assets/productImages'
+import { getCategoryImage } from '../assets/categoryImages'
 
 const slides = [
     {
@@ -67,14 +68,22 @@ function Home() {
         getAllCategories().then(setCategories)
         getAllProducts().then((products) => {
             const imgMap = {}
-            products.forEach((p) => {
-                if (!imgMap[p.idCategory] && productImages[p.idProduct]) {
-                    imgMap[p.idCategory] = productImages[p.idProduct]
+            categories.forEach((cat) => {
+                // First try to use categoryImages.js mapping
+                const categoryImg = getCategoryImage(cat.idCategory)
+                if (categoryImg) {
+                    imgMap[cat.idCategory] = categoryImg
+                } else {
+                    // Fallback: use first product image from this category
+                    const firstProduct = products.find((p) => p.idCategory === cat.idCategory)
+                    if (firstProduct && productImages[firstProduct.idProduct]) {
+                        imgMap[cat.idCategory] = productImages[firstProduct.idProduct]
+                    }
                 }
             })
             setCategoryImages(imgMap)
         })
-    }, [])
+    }, [categories])
 
     const handlePrev = () => setCurrent((current - 1 + slides.length) % slides.length)
     const handleNext = () => setCurrent((current + 1) % slides.length)
