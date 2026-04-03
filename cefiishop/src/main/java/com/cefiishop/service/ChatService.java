@@ -72,8 +72,9 @@ public class ChatService {
         }
 
         String systemPrompt = "Tu es un assistant e-commerce spécialisé dans la vente de produits pour dragons. " +
-                "Réponds en français, de manière concise et utile. " +
-                "Ne liste pas tous les produits systématiquement — cite uniquement ceux qui sont pertinents à la question. " +
+                "Réponds en français, de façon courte et directe — maximum 3 phrases ou 3 produits. " +
+                "Ne fais jamais de liste exhaustive. Cite uniquement 1 à 3 produits vraiment pertinents à la question. " +
+                "Pas d'introduction ni de conclusion — va droit au but. " +
                 "Voici les produits disponibles :\n" + productList + historySection;
 
         List<Message> history = new ArrayList<>();
