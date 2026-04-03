@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
     Fab,
     Paper,
@@ -11,6 +12,7 @@ import {
 } from '@mui/material'
 import { Close as CloseIcon, Comment as CommentIcon } from '@mui/icons-material'
 import { createConversation, sendMessage as sendChatMessage } from '../api/chatApi'
+import { getAvailableProducts } from '../api/productApi'
 
 function getOrCreateUserId() {
     const user = JSON.parse(localStorage.getItem('user') || 'null')
@@ -25,15 +27,39 @@ function getOrCreateUserId() {
     return userId
 }
 
+function renderBotMessage(text, products, navigate) {
+    const parts = text.split(/\*\*(.+?)\*\*/g)
+    return parts.map((part, i) => {
+        if (i % 2 === 1) {
+            const match = products.find(p => p.nom?.toLowerCase() === part.toLowerCase())
+            if (match) {
+                return (
+                    <span
+                        key={i}
+                        onClick={() => navigate(`/products/${match.idProduct}`)}
+                        style={{ fontWeight: 'bold', textDecoration: 'underline', cursor: 'pointer', color: 'inherit' }}
+                    >
+                        {part}
+                    </span>
+                )
+            }
+            return <strong key={i}>{part}</strong>
+        }
+        return part
+    })
+}
+
 export default function Chatbot({ title = "Assistant", placeholder = "Posez une question...", collapsedInitially = true }) {
     const theme = useTheme()
+    const navigate = useNavigate()
     const [open, setOpen] = useState(!collapsedInitially)
     const [messages, setMessages] = useState([
-        { id: 1, from: 'bot', text: `Bonjour ! Je suis l'assistant DragonShop. Je peux vous aider à trouver des produits magnifiques.` }
+        { id: 1, from: 'bot', text: `Bonjour ! Je suis l'assistant Draconnique. Je peux te recommander des produits adapté au profil de ton dragon.` }
     ])
     const [input, setInput] = useState('')
     const [loading, setLoading] = useState(false)
     const [conversationId, setConversationId] = useState(null)
+    const [products, setProducts] = useState([])
     const messagesEndRef = useRef(null)
 
     useEffect(() => {
@@ -41,6 +67,10 @@ export default function Chatbot({ title = "Assistant", placeholder = "Posez une 
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
         }
     }, [messages, open])
+
+    useEffect(() => {
+        getAvailableProducts().then(setProducts).catch(() => { })
+    }, [])
 
     useEffect(() => {
         if (open && !conversationId) {
@@ -182,7 +212,11 @@ export default function Chatbot({ title = "Assistant", placeholder = "Posez une 
                                         lineHeight: 1.4,
                                     }}
                                 >
-                                    <Typography variant="body2">{m.text}</Typography>
+                                    <Typography variant="body2">
+                                        {m.from === 'bot'
+                                            ? renderBotMessage(m.text, products, navigate)
+                                            : m.text}
+                                    </Typography>
                                 </Box>
                             </Box>
                         ))}

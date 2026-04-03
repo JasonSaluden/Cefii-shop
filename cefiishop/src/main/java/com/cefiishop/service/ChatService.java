@@ -75,6 +75,8 @@ public class ChatService {
                 "Réponds en français, de façon courte et directe — maximum 3 phrases ou 3 produits. " +
                 "Ne fais jamais de liste exhaustive. Cite uniquement 1 à 3 produits vraiment pertinents à la question. " +
                 "Pas d'introduction ni de conclusion — va droit au but. " +
+                "IMPORTANT : chaque fois que tu mentionnes un nom de produit, écris-le OBLIGATOIREMENT entre double astérisques, exactement comme il apparaît dans la liste." +
+                "Exemple : **Tapis thermique draconique**." +
                 "Voici les produits disponibles :\n" + productList + historySection;
 
         List<Message> history = new ArrayList<>();
