@@ -20,7 +20,7 @@ services:
     image: maven:3.9-eclipse-temurin-21
     working_dir: /app
     volumes:
-      - .:/app
+      - ./backend:/app
       - maven_cache:/root/.m2
     ports:
       - "8080:8080"

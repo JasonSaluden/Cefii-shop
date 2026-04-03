@@ -53,7 +53,7 @@ jobs:
           cache: maven
       
       - name: Build with Maven
-        working-directory: ./cefiishop
+        working-directory: ./backend
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/cefiishop?allowPublicKeyRetrieval=true&useSSL=false
           SPRING_DATASOURCE_USERNAME: cefiishop_user
@@ -62,7 +62,7 @@ jobs:
         run: mvn clean package -DskipTests
       
       - name: Run Tests
-        working-directory: ./cefiishop
+        working-directory: ./backend
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/cefiishop?allowPublicKeyRetrieval=true&useSSL=false
           SPRING_DATASOURCE_USERNAME: cefiishop_user
@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: backend-jar
-          path: cefiishop/target/cefiishop-*.jar
+          path: backend/target/cefiishop-*.jar
 
   # Job 2 : Build et Test Frontend
   frontend-build:
@@ -90,22 +90,22 @@ jobs:
           node-version: '18'
       
       - name: Install Dependencies
-        working-directory: ./cefiishop/front
+        working-directory: ./frontend
         run: npm install
       
       - name: Build Frontend
-        working-directory: ./cefiishop/front
+        working-directory: ./frontend
         run: npm run build
       
       - name: Run Frontend Tests
-        working-directory: ./cefiishop/front
+        working-directory: ./frontend
         run: npm test -- --run
       
       - name: Upload Frontend Build
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build
-          path: cefiishop/front/dist
+          path: frontend/dist
 
   # Job 3 : Build Docker Images (seulement sur push à main/develop)
   docker-build:
@@ -150,8 +150,8 @@ jobs:
       - name: Build and push Backend Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./cefiishop
-          file: ./cefiishop/Dockerfile
+          context: ./backend
+          file: ./backend/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}/backend:${{ github.sha }}
           cache-from: type=gha
@@ -160,8 +160,8 @@ jobs:
       - name: Build and push Frontend Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./cefiishop/front
-          file: ./cefiishop/front/Dockerfile
+          context: ./frontend
+          file: ./frontend/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}/frontend:${{ github.sha }}
           cache-from: type=gha
@@ -181,11 +181,11 @@ jobs:
           node-version: '18'
       
       - name: Install Frontend Dependencies
-        working-directory: ./cefiishop/front
+        working-directory: ./frontend
         run: npm install
       
       - name: Run ESLint
-        working-directory: ./cefiishop/front
+        working-directory: ./frontend
         run: npm run lint || true
       
       - name: Set up JDK 21
@@ -195,7 +195,7 @@ jobs:
           distribution: 'temurin'
       
       - name: Run Checkstyle (Backend)
-        working-directory: ./cefiishop
+        working-directory: ./backend
         run: mvn checkstyle:check || true
 
   # Job 5 : Notification

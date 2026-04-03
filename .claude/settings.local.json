@@ -6,7 +6,9 @@
       "Bash(do echo:*)",
       "Read(//c/Users/jason.saluden/Cefii-shop/**)",
       "Bash(done)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(rmdir cefiishop/front/cefiishop)",
+      "Bash(git mv:*)"
     ]
   }
 }
