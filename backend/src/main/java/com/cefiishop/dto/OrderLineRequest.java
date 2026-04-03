@@ -2,6 +2,7 @@ package com.cefiishop.dto;
 
 import java.math.BigDecimal;
 
+// Représentation d'une ligne de commande dans une requête de création de commande
 public class OrderLineRequest {
     private Integer productId;
     private Integer quantite;

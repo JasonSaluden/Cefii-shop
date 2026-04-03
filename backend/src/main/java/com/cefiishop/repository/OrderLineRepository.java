@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+// Interface de repository pour gérer les opérations CRUD sur les lignes de commande, avec une méthode personnalisée pour 
+// trouver les lignes d'une commande spécifique
 @Repository
 public interface OrderLineRepository extends JpaRepository<OrderLine, Integer> {
 

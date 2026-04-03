@@ -9,6 +9,8 @@ import com.cefiishop.dto.CategoryResponse;
 import com.cefiishop.model.Category;
 import com.cefiishop.repository.CategoryRepository;
 
+// Service pour gérer les opérations liées aux catégories de produits, avec des méthodes pour récupérer toutes les catégories, 
+// une catégorie par ID et une catégorie par nom, en utilisant le repository de catégories pour accéder à la base de données et en mappant les entités Category vers des DTO CategoryResponse pour la réponse
 @Service
 public class CategoryService {
 
@@ -40,6 +42,7 @@ public class CategoryService {
         return mapToResponse(category);
     }
     
+    // Méthode privée pour mapper une entité Category vers un DTO CategoryResponse
     private CategoryResponse mapToResponse(Category category) {
         CategoryResponse response = new CategoryResponse();
         response.setIdCategory(category.getIdCategory());

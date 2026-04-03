@@ -11,6 +11,8 @@ import com.cefiishop.model.Product;
 import com.cefiishop.model.UserBehavior;
 import com.cefiishop.repository.ProductRepository;
 
+// Service pour gérer les recommandations de produits, avec des méthodes pour obtenir des recommandations basées sur un produit spécifique et 
+// des recommandations personnalisées basées sur le comportement de l'utilisateur
 @Service
 public class RecommendationService {
 

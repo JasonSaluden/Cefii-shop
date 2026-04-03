@@ -1,3 +1,4 @@
+// Contient les fonctions pour les appels API liés à l'authentification (login, register, etc.)
 import api from './axiosInstance';
 
 export const login = (credentials) =>

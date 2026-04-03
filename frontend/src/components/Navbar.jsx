@@ -30,6 +30,7 @@ const navLinkSx = {
     '&:hover': { color: '#D4AF37' },
 }
 
+// Composant de barre de navigation, présent sur toutes les pages
 export default function Navbar() {
     const { totalItems } = useCart()
     const { user, logout } = useAuth()

@@ -2,6 +2,9 @@ import { createContext, useContext, useState, useEffect } from 'react'
 
 const CartContext = createContext(null)
 
+// Fournit le contexte du panier pour l'application, permettant de gérer les produits ajoutés au panier, 
+// les quantités, et les fonctions d'ajout/suppression/mise à jour du panier. 
+// Le panier est également synchronisé avec le localStorage pour persister les données entre les sessions.
 export function CartProvider({ children }) {
     const [cartItems, setCartItems] = useState(() => {
         try {

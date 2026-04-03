@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Interface de repository pour gérer les opérations CRUD sur les commandes, avec des méthodes personnalisées pour trouver les commandes d'un utilisateur, 
+// les commandes par statut, les commandes récentes d'un utilisateur
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByUser(User user);

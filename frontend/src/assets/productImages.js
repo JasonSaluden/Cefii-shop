@@ -25,6 +25,7 @@ import transport from './products/transport.png'
 import bebeDragon from './products/bebe-dragon.png'
 import vetements from './products/vetements.png'
 
+// Liste des images associées à chaque produit, indexée par l'ID du produit. Si un produit n'a pas d'image définie, la fonction getProductImage retournera null.
 const productImages = {
     1: selle,          // Selle de dragon renforcée
     2: harnais,        // Harnais de contrôle draconique

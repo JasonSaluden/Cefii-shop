@@ -2,6 +2,7 @@ package com.cefiishop.dto;
 
 import java.math.BigDecimal;
 
+// Représentation d'un produit pour les réponses API, incluant les détails du produit et les informations de catégorie associées
 public class ProductResponse {
     private Integer idProduct;
     private String nom;

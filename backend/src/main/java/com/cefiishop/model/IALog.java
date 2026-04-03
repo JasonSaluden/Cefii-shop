@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+// Représentation d'un log de conversation avec l'IA, stocké dans MongoDB, incluant les détails de la requête, la réponse, 
+// les métadonnées d'exécution et le statut de la requête
 @Document(collection = "IAlogs")
 public class IALog {
 

@@ -2,6 +2,8 @@ package com.cefiishop.dto;
 
 import java.time.LocalDateTime;
 
+// Représentation d'un utilisateur pour les réponses API, incluant les informations de base telles que l'ID, 
+// le mail, le rôle et la date de création
 public class UserResponse {
     private Integer id;
     private String mail;

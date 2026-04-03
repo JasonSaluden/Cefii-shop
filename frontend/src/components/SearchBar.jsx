@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Paper, InputBase, IconButton, Box } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 
+// Composant de barre de recherche
 export default function SearchBar({
     placeholder = 'Chercher un produit...',
     onSearch = () => { },

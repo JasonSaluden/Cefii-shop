@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+// Représentation du comportement d'un utilisateur sur le site, stocké dans MongoDB, incluant les produits consultés et les métadonnées associées
 @Document(collection = "user_behavior")
 public class UserBehavior {
 

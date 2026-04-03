@@ -14,6 +14,7 @@ import {
 import { login as loginApi } from '../api/authApi'
 import { useAuth } from '../context/AuthContext'
 
+// Composant de connexion pour les utilisateurs, permettant de saisir leur email et mot de passe pour accéder à leur compte.
 export default function Connection() {
     const navigate = useNavigate()
     const { login } = useAuth()

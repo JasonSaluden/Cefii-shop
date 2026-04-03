@@ -1,5 +1,6 @@
 package com.cefiishop.dto;
 
+//Représentation d'une catégorie de produit pour les réponses API
 public class CategoryResponse {
     private Integer idCategory;
     private String nom;

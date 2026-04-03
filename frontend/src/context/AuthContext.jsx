@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from 'react'
 
 const AuthContext = createContext(null)
 
+// Fournit le contexte d'authentification pour l'application, permettant de gérer l'état de l'utilisateur connecté et les fonctions de connexion/déconnexion.
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
         try {

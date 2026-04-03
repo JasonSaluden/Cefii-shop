@@ -18,6 +18,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Service pour gérer les opérations liées aux commandes, avec des méthodes pour créer une commande, 
+// récupérer une commande par ID, récupérer les commandes d'un utilisateur, récupérer toutes les commandes, 
+// mettre à jour le statut d'une commande et supprimer une commande.
 @Service
 public class OrderService {
 

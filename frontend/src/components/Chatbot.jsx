@@ -14,6 +14,8 @@ import { Close as CloseIcon, Comment as CommentIcon } from '@mui/icons-material'
 import { createConversation, sendMessage as sendChatMessage } from '../api/chatApi'
 import { getAvailableProducts } from '../api/productApi'
 
+// Gère l'identifiant utilisateur pour le chatbot, en utilisant localStorage pour le stocker de manière persistante. Si un utilisateur est connecté, utilise son ID,
+//  sinon génère un ID aléatoire et le stocke pour les futures sessions.
 function getOrCreateUserId() {
     const user = JSON.parse(localStorage.getItem('user') || 'null')
     if (user?.id) {
@@ -27,6 +29,8 @@ function getOrCreateUserId() {
     return userId
 }
 
+// Rend le message du bot en traitant les parties entourées de ** comme des produits cliquables. 
+// Si le texte correspond au nom d'un produit disponible, il devient un lien qui redirige vers la page du produit.
 function renderBotMessage(text, products, navigate) {
     const parts = text.split(/\*\*(.+?)\*\*/g)
     return parts.map((part, i) => {
@@ -49,6 +53,7 @@ function renderBotMessage(text, products, navigate) {
     })
 }
 
+// Composant principal du chatbot, qui gère l'état de la conversation, l'affichage des messages, et les interactions utilisateur.
 export default function Chatbot({ title = "Assistant", placeholder = "Posez une question...", collapsedInitially = true }) {
     const theme = useTheme()
     const navigate = useNavigate()

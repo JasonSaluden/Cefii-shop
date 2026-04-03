@@ -1,3 +1,4 @@
+// Contient les fonctions pour les appels API liés aux commandes (créer une commande, récupérer une commande par ID, etc.)
 import api from './axiosInstance';
 
 export const createOrder = (userId, orderData) =>

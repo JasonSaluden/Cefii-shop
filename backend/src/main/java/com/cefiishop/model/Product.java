@@ -15,6 +15,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+// Entité représentant un produit disponible à la vente, avec des attributs pour l'identifiant, le nom, la description, 
+// le prix, le stock disponible, l'URL de l'image du produit, la catégorie associée et les lignes de commande associées à ce produit
 @Entity
 @Table(name = "products")
 public class Product {

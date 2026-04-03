@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Service pour gérer les opérations liées aux produits, avec des méthodes pour récupérer tous les produits, 
+// un produit par ID, rechercher par nom, filtrer par catégorie et disponibilité, et trier par prix
 @Service
 public class ProductService {
 

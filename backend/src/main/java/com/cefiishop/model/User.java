@@ -15,6 +15,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
+// Entité représentant un utilisateur de l'application, avec des attributs pour l'identifiant, le rôle de l'utilisateur, 
+// le pseudo, l'adresse e-mail, le mot de passe, la date de création et une liste de commandes associées à cet utilisateur
 @Entity
 @Table(name = "user")
 public class User {

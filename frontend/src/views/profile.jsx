@@ -21,6 +21,7 @@ import { useAuth } from '../context/AuthContext'
 import { getUserById, updateUser } from '../api/userApi'
 import { getUserOrders } from '../api/orderApi'
 
+// Affiche les informations du profil de l'utilisateur connecté, y compris son email, son rôle et la date de création du compte.
 export default function Profile() {
     const theme = useTheme()
     const navigate = useNavigate()

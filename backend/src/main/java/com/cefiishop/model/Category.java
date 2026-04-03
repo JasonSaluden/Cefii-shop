@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+// Entité représentant une catégorie de produits, avec des attributs pour l'identifiant, le nom, la description et une liste de produits associés à cette catégorie
 @Entity
 @Table(name = "category")
 public class Category {

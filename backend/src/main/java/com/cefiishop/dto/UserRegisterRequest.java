@@ -1,5 +1,6 @@
 package com.cefiishop.dto;
 
+// Représentation d'une requête de connexion d'utilisateur, contenant l'email et le mot de passe
 public class UserRegisterRequest {
     private String mail;
     private String password;

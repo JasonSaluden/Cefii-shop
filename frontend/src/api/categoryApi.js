@@ -1,3 +1,4 @@
+// Contient les fonctions pour les appels API liés aux catégories (récupérer toutes les catégories, récupérer une catégorie par ID, etc.)
 import api from './axiosInstance';
 
 export const getAllCategories = () =>

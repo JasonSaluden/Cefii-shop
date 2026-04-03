@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import com.cefiishop.model.Category;
 import com.cefiishop.model.Product;
 
+// Interface de repository pour gérer les opérations CRUD sur les produits, avec des méthodes personnalisées pour trouver les produits par catégorie, 
+// par nom, les produits disponibles, les produits similaires, et les produits d'une catégorie en excluant certains produits
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     @EntityGraph(attributePaths = "category")

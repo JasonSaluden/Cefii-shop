@@ -1,8 +1,6 @@
-// Import images from productImages
 import productImages from './productImages'
 
-// Map category IDs to product IDs for their display image
-// This allows us to choose which product image represents each category
+// Defini l'image représentant chaque catégorie de produits, en utilisant les images correspondantes de productImages. 
 const categoryImageMapping = {
     1: productImages[1],      // Équipement -> Selle de dragon renforcée
     2: productImages[27],     // Complément minéral draconique

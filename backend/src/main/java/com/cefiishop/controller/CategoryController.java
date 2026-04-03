@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cefiishop.dto.CategoryResponse;
 import com.cefiishop.service.CategoryService;
 
+// Contrôleur pour gérer les endpoints liés aux catégories de produits
 @RestController
 @RequestMapping("/api/categories")
 @CrossOrigin(origins = "*")
@@ -24,17 +25,19 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    // Endpoints pour récupérer les catégories
+    // Récupère toutes les catégories disponibles
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
+    // Récupère une catégorie spécifique par son ID
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Integer id) {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
+    // Récupère une catégorie spécifique par son nom
     @GetMapping("/search")
     public ResponseEntity<CategoryResponse> getCategoryByNom(@RequestParam String nom) {
         return ResponseEntity.ok(categoryService.getCategoryByNom(nom));

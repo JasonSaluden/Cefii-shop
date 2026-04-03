@@ -14,6 +14,8 @@ import com.cefiishop.dto.ProductResponse;
 import com.cefiishop.service.ProductService;
 import com.cefiishop.service.RecommendationService;
 
+// Contrôleur pour gérer les endpoints liés aux produits, notamment pour récupérer tous les produits, 
+// récupérer un produit par son ID, rechercher des produits par nom,
 @RestController
 @RequestMapping("/api/products")
 @CrossOrigin(origins = "*")
@@ -27,43 +29,43 @@ public class ProductController {
         this.recommendationService = recommendationService;
     }
 
-    // Endpoint pour récupérer tous les produits
+    // Récupère tous les produits disponibles
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
-    // Enpoint pour récupérer un produit par son ID
+    // Récupère un produit spécifique par son ID
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProductById(@PathVariable Integer id) {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
-    // Endpoint pour rechercher des produits par nom
+    // Recherche des produits par nom 
     @GetMapping("/search")
     public ResponseEntity<List<ProductResponse>> searchByNom(@RequestParam String nom) {
         return ResponseEntity.ok(productService.searchByNom(nom));
     }
 
-    // Endpoint pour récupérer les produits d'une catégorie donnée
+    // Récupère les produits d'une catégorie donnée
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<ProductResponse>> getProductsByCategory(@PathVariable Integer categoryId) {
         return ResponseEntity.ok(productService.getProductsByCategory(categoryId));
     }
 
-    // Endpoint pour récupérer les produits disponibles (en stock)
+    // Récupère les produits disponibles (en stock)
     @GetMapping("/available")
     public ResponseEntity<List<ProductResponse>> getAvailableProducts() {
         return ResponseEntity.ok(productService.getAvailableProducts());
     }
 
-    // Endpoint pour récupérer les produits d'une catégorie donnée triés par prix croissant
+    // Récupère les produits d'une catégorie donnée triés par prix
     @GetMapping("/category/{categoryId}/sorted")
     public ResponseEntity<List<ProductResponse>> getProductsByCategoryOrderByPrice(@PathVariable Integer categoryId) {
         return ResponseEntity.ok(productService.getProductsByCategoryOrderByPrice(categoryId));
     }
 
-    // Endpoint pour récupérer les recommandations de produits similaires à un produit donné
+    // Récupère les recommandations de produits similaires à un produit donné
     @GetMapping("/{id}/recommendations")
     public ResponseEntity<List<ProductResponse>> getRecommendations(@PathVariable Integer id) {
         return ResponseEntity.ok(recommendationService.getRecommendations(id));

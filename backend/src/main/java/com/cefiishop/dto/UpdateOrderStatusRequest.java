@@ -1,5 +1,6 @@
 package com.cefiishop.dto;
 
+// Représentation d'une requête pour mettre à jour le statut d'une commande
 public class UpdateOrderStatusRequest {
     private String status;
 

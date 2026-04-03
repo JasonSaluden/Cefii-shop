@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+// Représentation d'une conversation entre un utilisateur et l'IA, stockée dans MongoDB, 
+// incluant les messages échangés et les métadonnées associées
 @Document(collection = "conversation")
 public class Conversation {
 

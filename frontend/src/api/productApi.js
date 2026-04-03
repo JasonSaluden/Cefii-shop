@@ -1,3 +1,4 @@
+// Contient les fonctions pour les appels API liés aux produits (récupérer tous les produits, récupérer un produit par ID, etc.)
 import api from './axiosInstance';
 
 export const getAllProducts = () =>

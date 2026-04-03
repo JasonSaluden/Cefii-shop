@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-// Configuration de l'application, pour les beans de sécurité et d'IA
+// Configuration de l'application, pour les beans de sécurité, d'IA et d'accès API (CORS)
 @Configuration
 public class AppConfig {
 

@@ -21,6 +21,7 @@ import { useAuth } from '../context/AuthContext'
 import productImages from '../assets/productImages'
 import { getCategoryImage } from '../assets/categoryImages'
 
+// Carousel affichant des images lambda si pas connecté ou si aucune recommandation disponible
 const staticSlides = [
     {
         id: 's1',
@@ -42,6 +43,7 @@ const staticSlides = [
     },
 ]
 
+// Page d'accueil affichant un carousel de recommandations personnalisées (ou statiques si non connecté) et une section de catégories de produits.
 function Home() {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -66,12 +68,10 @@ function Home() {
         getAllProducts().then((products) => {
             const imgMap = {}
             categories.forEach((cat) => {
-                // First try to use categoryImages.js mapping
                 const categoryImg = getCategoryImage(cat.idCategory)
                 if (categoryImg) {
                     imgMap[cat.idCategory] = categoryImg
                 } else {
-                    // Fallback: use first product image from this category
                     const firstProduct = products.find((p) => p.idCategory === cat.idCategory)
                     if (firstProduct && productImages[firstProduct.idProduct]) {
                         imgMap[cat.idCategory] = productImages[firstProduct.idProduct]

@@ -13,6 +13,7 @@ import com.cefiishop.dto.UserRegisterRequest;
 import com.cefiishop.dto.UserResponse;
 import com.cefiishop.service.UserService;
 
+// Contrôleur pour gérer les endpoints d'authentification (inscription, connexion, déconnexion)
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
@@ -24,18 +25,19 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // Endpoints pour l'inscription, la connexion et la déconnexion
-    
+    // Inscription d'un utilisateur    
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody UserRegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(request));
     }
 
+    // Connexion d'un utilisateur
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(@RequestBody UserLoginRequest request) {
         return ResponseEntity.ok(userService.login(request));
     }
 
+    // Déconnexion d'un utilisateur
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         return ResponseEntity.ok("Déconnecté avec succès");

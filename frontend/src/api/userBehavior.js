@@ -1,3 +1,4 @@
+// Contient les fonctions pour les appels API liés au comportement utilisateur (suivi des vues de produits, recommandations personnalisées, etc.)
 import api from './axiosInstance';
 
 export const trackProductView = (userId, productId) =>

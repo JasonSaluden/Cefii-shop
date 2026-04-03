@@ -16,6 +16,8 @@ import com.cefiishop.dto.UserRegisterRequest;
 import com.cefiishop.dto.UserResponse;
 import com.cefiishop.service.UserService;
 
+// Contrôleur pour gérer les endpoints liés aux utilisateurs, notamment pour récupérer, 
+// mettre à jour et supprimer les informations d'un utilisateur, ainsi que pour récupérer la liste de tous les utilisateurs
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "*")

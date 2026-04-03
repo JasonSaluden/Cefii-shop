@@ -12,6 +12,8 @@ import com.cefiishop.dto.UserResponse;
 import com.cefiishop.model.User;
 import com.cefiishop.repository.UserRepository;
 
+// Service pour gérer les opérations liées aux utilisateurs, avec des méthodes pour l'inscription, la connexion, la récupération par ID, 
+// la mise à jour, la suppression et la récupération de tous les utilisateurs.
 @Service
 public class UserService {
 

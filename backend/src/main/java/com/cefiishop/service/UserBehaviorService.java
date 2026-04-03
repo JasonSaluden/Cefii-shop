@@ -14,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.cefiishop.model.UserBehavior;
 import com.cefiishop.repository.UserBehaviorRepository;
 
+// Service pour gérer le comportement des utilisateurs, notamment pour enregistrer les produits vus, récupérer le comportement d'un utilisateur 
+// et nettoyer les anciennes vues
 @Service
 public class UserBehaviorService {
 

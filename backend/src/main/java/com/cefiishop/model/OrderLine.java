@@ -12,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+// Entité représentant une ligne de commande, avec des attributs pour l'identifiant, la commande associée, 
+// le produit associé, la quantité et le prix unitaire
 @Entity
 @Table(name = "order_line")
 public class OrderLine {

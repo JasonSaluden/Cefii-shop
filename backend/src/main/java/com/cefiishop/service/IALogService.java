@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.cefiishop.model.IALog;
 import com.cefiishop.repository.IALogRepository;
 
+// Service pour gérer les logs d'IA, avec des méthodes pour enregistrer un log et récupérer les logs d'une conversation spécifique
 @Service
 public class IALogService {
 

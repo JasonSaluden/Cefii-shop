@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import { register } from '../api/authApi'
 
+// Composant d'inscription pour les nouveaux utilisateurs, permettant de saisir leur email, mot de passe et confirmation de mot de passe pour créer un compte.
 export default function Register() {
     const navigate = useNavigate()
     const [formData, setFormData] = useState({

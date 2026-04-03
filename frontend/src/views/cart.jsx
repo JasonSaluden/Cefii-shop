@@ -26,6 +26,8 @@ import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { createOrder } from '../api/orderApi'
 
+// Composant de la page panier, affichant les produits ajoutés, le résumé de la commande et permettant de passer à la caisse. 
+//  l'utilisateur n'est pas connecté, il est redirigé vers la page de connexion lors du checkout.
 function Cart() {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))

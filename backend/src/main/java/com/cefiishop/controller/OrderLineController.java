@@ -17,6 +17,8 @@ import com.cefiishop.dto.OrderLineRequest;
 import com.cefiishop.dto.OrderLineResponse;
 import com.cefiishop.service.OrderLineService;
 
+// Contrôleur pour gérer les endpoints liés aux lignes de commande, notamment pour ajouter une ligne de commande à une commande existante,
+//  récupérer les lignes de commande d'une commande donnée, récupérer une ligne de commande par son ID et supprimer une ligne de commande
 @RestController
 @RequestMapping("/api/orderlines")
 @CrossOrigin(origins = "*")
@@ -28,7 +30,7 @@ public class OrderLineController {
         this.orderLineService = orderLineService;
     }
 
-    // Endpoint pour ajouter une ligne de commande à une commande existante
+    // Ajoute une ligne de commande à une commande existante
     @PostMapping("/orders/{orderId}")
     public ResponseEntity<OrderLineResponse> addOrderLine(
             @PathVariable Integer orderId,
@@ -36,19 +38,19 @@ public class OrderLineController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderLineService.addOrderLine(orderId, request));
     }
 
-    // Endpoint pour récupérer toutes les lignes de commande d'une commande donnée
+    // Récupère les lignes de commande d'une commande donnée
     @GetMapping("/orders/{orderId}")
     public ResponseEntity<List<OrderLineResponse>> getOrderLinesByOrderId(@PathVariable Integer orderId) {
         return ResponseEntity.ok(orderLineService.getOrderLinesByOrderId(orderId));
     }
 
-    // Endpoint pour récupérer une ligne de commande par son ID
+    // Récupère une ligne de commande par son ID
     @GetMapping("/{id}")
     public ResponseEntity<OrderLineResponse> getOrderLineById(@PathVariable Integer id) {
         return ResponseEntity.ok(orderLineService.getOrderLineById(id));
     }
 
-    // Endpoint pour supprimer une ligne de commande 
+    // Supprime une ligne de commande par son ID 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrderLine(@PathVariable Integer id) {
         orderLineService.deleteOrderLine(id);

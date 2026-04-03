@@ -19,6 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
+// Entité représentant une commande passée par un utilisateur, avec des attributs pour l'identifiant, le statut de la commande, le total, la date de création, l'utilisateur associé et les lignes de commande associées
 @Entity
 @Table(name = "orders")
 public class Order {

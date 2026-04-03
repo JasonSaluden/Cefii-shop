@@ -18,6 +18,8 @@ import com.cefiishop.model.IALog;
 import com.cefiishop.model.UserBehavior;
 import com.cefiishop.repository.ConversationRepository;
 
+// Service qui gère les interactions de chat entre les utilisateurs et l'IA, en enrichissant les prompts avec les produits disponibles 
+// et l'historique de navigation, et en enregistrant les logs d'interaction avec l'IA pour chaque conversation
 @Service
 public class ChatService {
 

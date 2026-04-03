@@ -23,6 +23,7 @@ import { getAllCategories } from '../api/categoryApi'
 import { getProductImage } from '../assets/productImages'
 import { useCart } from '../context/CartContext'
 
+// Affiche une liste de produits avec des options de filtrage par catégorie et par prix.
 export default function Products() {
     const theme = useTheme()
     const navigate = useNavigate()

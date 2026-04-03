@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cefiishop.dto.ProductResponse;
 import com.cefiishop.service.RecommendationService;
 
+// Contrôleur pour gérer les endpoints liés à la page d'accueil
 @RestController
 @RequestMapping("/api/home")
 @CrossOrigin(origins = "*")
@@ -23,7 +24,7 @@ public class HomeController {
         this.recommendationService = recommendationService;
     }
 
-    // Endpoint pour récupérer les recommandations personnalisées pour un utilisateur
+    // Récupère les recommandations personnalisées pour un utilisateur
     @GetMapping("/recommendations/{userId}")
     public ResponseEntity<List<ProductResponse>> getRecommendations(@PathVariable Integer userId) {
         return ResponseEntity.ok(recommendationService.getPersonalizedRecommantations(userId));

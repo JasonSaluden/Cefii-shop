@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Service pour gérer les opérations liées aux lignes de commande, pas entierement utilisé pour le moment dans le projet
 @Service
 public class OrderLineService {
 

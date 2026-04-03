@@ -18,6 +18,9 @@ import { trackProductView } from '../api/userBehavior'
 import { getProductImage } from '../assets/productImages'
 import { useCart } from '../context/CartContext'
 
+// Affiche les détails d'un produit sélectionné, y compris son image, sa description, son prix et sa disponibilité (stocks). 
+// Permet également d'ajouter le produit au panier et affiche des recommandations de produits similaires. 
+// Lorsqu'un utilisateur visite la page d'un produit, une requête est envoyée pour suivre cette action à des fins d'analyse du comportement utilisateur.
 export default function ProductDetail() {
     const { id } = useParams()
     const navigate = useNavigate()

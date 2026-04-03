@@ -7,6 +7,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.cefiishop.model.Conversation;
 import com.cefiishop.repository.ConversationRepository;
 
+// Service pour gérer les conversations, avec des méthodes pour créer une conversation, récupérer une conversation par ID ou par utilisateur, 
+// et ajouter des messages à une conversation existante
 @Service
 public class ConversationService {
 

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './Footer.css'
 import logo from '../assets/logo.png'
 
+// Composant de pied de page 
 export default function Footer() {
     const [email, setEmail] = useState('')
     const [subscribed, setSubscribed] = useState(false)

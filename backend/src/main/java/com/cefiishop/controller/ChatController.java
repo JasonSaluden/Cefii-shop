@@ -2,6 +2,7 @@ package com.cefiishop.controller;
 
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
 import com.cefiishop.model.Conversation;
 import com.cefiishop.service.ChatService;
 
+// Contrôleur pour gérer les endpoints liés au chat avec l'IA, notamment pour envoyer des messages dans une conversation
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {

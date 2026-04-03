@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cefiishop.model.UserBehavior;
 import com.cefiishop.service.UserBehaviorService;
 
+// Contrôleur pour gérer les endpoints liés au comportement des utilisateurs, 
+// notamment pour enregistrer les produits consultés et récupérer le comportement d'un utilisateur spécifique
 @RestController
 @RequestMapping("/api/user-behavior")
 public class UserBehaviorController {
@@ -20,7 +22,7 @@ public class UserBehaviorController {
         this.userBehaviorService = userBehaviorService;
     }
 
-    // Endpoint pour enregistrer le produit consulté par un utilisateur, utile pour recommandation
+    // Enregistre le produit consulté par un utilisateur, utile pour recommandation
     @PostMapping("/{userId}/view/{productId}")
     public ResponseEntity<Void> addProductView(
             @PathVariable Integer userId,
@@ -29,7 +31,7 @@ public class UserBehaviorController {
         return ResponseEntity.ok().build();
     }
 
-    // Endpoint pour récupérer le comportement d'un utilisateur
+    // Récupère le comportement d'un utilisateur
     @GetMapping("/{userId}")
     public ResponseEntity<UserBehavior> getByUserId(@PathVariable Integer userId) {
         return ResponseEntity.ok(userBehaviorService.getByUserId(userId));

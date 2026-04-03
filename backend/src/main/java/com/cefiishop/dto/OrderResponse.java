@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Représentation d'une commande pour les réponses API, incluant les détails de la commande, 
+// les informations sur l'utilisateur et les lignes de commande associées
 public class OrderResponse {
     private Integer id;
     private String status;

@@ -19,6 +19,8 @@ import com.cefiishop.dto.OrderResponse;
 import com.cefiishop.dto.UpdateOrderStatusRequest;
 import com.cefiishop.service.OrderService;
 
+// Contrôleur pour gérer les endpoints liés aux commandes, notamment pour créer une nouvelle commande, 
+// récupérer les commandes d'un utilisateur, mettre à jour le statut d'une commande et supprimer une commande
 @RestController
 @RequestMapping("/api/orders")
 @CrossOrigin(origins = "*")
@@ -30,7 +32,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    // Endpoint pour créer une nouvelle commande pour un utilisateur donné 
+    // Crée une nouvelle commande pour un utilisateur donné
     @PostMapping("/users/{userId}")
     public ResponseEntity<OrderResponse> createOrder(
             @PathVariable Integer userId,
@@ -38,25 +40,25 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(userId, request));
     }
 
-    // Endpoint pour récupérer une commande par son ID
+    // Récupère une commande spécifique par son ID
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable Integer id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
-    // Endpoint pour récupérer toutes les commandes d'un utilisateur donné
+    // Récupère toutes les commandes d'un utilisateur donné
     @GetMapping("/users/{userId}")
     public ResponseEntity<List<OrderResponse>> getUserOrders(@PathVariable Integer userId) {
         return ResponseEntity.ok(orderService.getUserOrders(userId));
     }
 
-    // Endpoint pour récupérer toutes les commandes (si besoin pour un compte admin)
+    // Récupère toutes les commandes 
     @GetMapping
     public ResponseEntity<List<OrderResponse>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
-    // Endpoint pour mettre à jour le statut d'une commande (ex: en cours, expédiée, livrée, annulée)
+    // Met à jour le statut d'une commande
     @PutMapping("/{id}/status")
     public ResponseEntity<OrderResponse> updateOrderStatus(
             @PathVariable Integer id,
@@ -64,7 +66,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, request.getStatus()));
     }
 
-    // Endpoint pour supprimer une commande (si besoin pour un compte admin)
+    // Supprime une commande
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
         orderService.deleteOrder(id);

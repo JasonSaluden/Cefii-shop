@@ -2,6 +2,7 @@ package com.cefiishop.dto;
 
 import java.math.BigDecimal;
 
+// Représentation d'une ligne de commande pour les réponses API, incluant les détails du produit et les calculs de prix
 public class OrderLineResponse {
     private Integer id;
     private Integer orderId;

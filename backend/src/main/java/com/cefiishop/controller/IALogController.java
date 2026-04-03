@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cefiishop.model.IALog;
 import com.cefiishop.service.IALogService;
 
+// Contrôleur pour gérer les endpoints liés aux logs de conversation avec l'IA, notamment pour enregistrer et récupérer les logs d'une conversation spécifique
 @RestController
 @RequestMapping("/api/ia-logs")
 public class IALogController {
@@ -23,13 +24,13 @@ public class IALogController {
         this.iaLogService = iaLogService;
     }
 
-    // Endpoint pour enregistrer un log de conversation avec l'IA
+    // Enregistre un log de conversation avec l'IA
     @PostMapping
     public ResponseEntity<IALog> save(@RequestBody IALog log) {
         return ResponseEntity.ok(iaLogService.save(log));
     }
 
-    // Endpoint pour récupérer les logs d'une conversation spécifique
+    // Récupère les logs d'une conversation spécifique
     @GetMapping("/conversation/{conversationId}")
     public ResponseEntity<List<IALog>> getByConversationId(@PathVariable String conversationId) {
         return ResponseEntity.ok(iaLogService.getByConversationId(conversationId));

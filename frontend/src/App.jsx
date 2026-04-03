@@ -14,6 +14,8 @@ import Profile from './views/profile'
 import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
 
+// Composant principal de l'application qui intègre le contexte d'authentification et de panier, le routage avec React Router, 
+// et les composants de navigation, pied de page et chatbot.
 function App() {
   return (
     <AuthProvider>
