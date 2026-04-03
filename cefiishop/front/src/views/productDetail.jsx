@@ -73,15 +73,16 @@ export default function ProductDetail() {
             </Button>
 
             <Paper sx={{ p: 4, borderRadius: 2 }}>
-                <Grid container spacing={4}>
+                <Grid container spacing={4} alignItems="flex-start">
                     {/* Image */}
-                    <Grid item xs={12} md={5}>
+                    <Grid item xs={12} sm={5}>
                         <Box
                             component="img"
                             src={getProductImage(product) || 'https://placehold.co/500x400?text=Produit'}
                             alt={product.nom}
                             sx={{
                                 width: '100%',
+                                maxWidth: 400,
                                 borderRadius: 2,
                                 objectFit: 'cover',
                                 maxHeight: 400,
@@ -90,7 +91,7 @@ export default function ProductDetail() {
                     </Grid>
 
                     {/* Infos */}
-                    <Grid item xs={12} md={7}>
+                    <Grid item xs={12} sm={7}>
                         <Chip
                             label={product.categoryNom}
                             size="small"

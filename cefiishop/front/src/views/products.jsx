@@ -30,6 +30,7 @@ export default function Products() {
     const [searchParams] = useSearchParams()
     const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
     const [priceRange, setPriceRange] = useState([0, 2000])
+    const [maxPrice, setMaxPrice] = useState(2000)
     const [selectedCategories, setSelectedCategories] = useState(
         searchParams.get('category') ? [searchParams.get('category')] : []
     )
@@ -43,6 +44,7 @@ export default function Products() {
                 setProducts(prods)
                 setCategories(cats)
                 const maxPrice = Math.max(...prods.map(p => p.prix), 2000)
+                setMaxPrice(maxPrice)
                 setPriceRange([0, maxPrice])
             })
             .finally(() => setLoading(false))
@@ -164,7 +166,7 @@ export default function Products() {
                                 value={priceRange}
                                 onChange={(e, newValue) => setPriceRange(newValue)}
                                 min={0}
-                                max={2000}
+                                max={maxPrice}
                                 step={50}
                                 valueLabelDisplay="auto"
                                 valueLabelFormat={(value) => `${value}€`}

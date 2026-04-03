@@ -12,6 +12,7 @@ import com.cefiishop.repository.OrderRepository;
 import com.cefiishop.repository.ProductRepository;
 import com.cefiishop.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,6 +31,7 @@ public class OrderService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public OrderResponse createOrder(Integer userId, CreateOrderRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouvé"));

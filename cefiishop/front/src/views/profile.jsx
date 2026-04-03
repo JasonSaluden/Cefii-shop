@@ -83,22 +83,22 @@ export default function Profile() {
 
     const statusColor = (status) => {
         switch (status) {
-            case 'PENDING': return 'warning'
-            case 'CONFIRMED': return 'info'
-            case 'SHIPPED': return 'primary'
-            case 'DELIVERED': return 'success'
-            case 'CANCELLED': return 'error'
+            case 'EN_ATTENTE': return 'warning'
+            case 'PAYE': return 'info'
+            case 'EXPEDIE': return 'primary'
+            case 'LIVRE': return 'success'
+            case 'ANNULE': return 'error'
             default: return 'default'
         }
     }
 
     const statusLabel = (status) => {
         switch (status) {
-            case 'PENDING': return 'En attente'
-            case 'CONFIRMED': return 'Confirmée'
-            case 'SHIPPED': return 'Expédiée'
-            case 'DELIVERED': return 'Livrée'
-            case 'CANCELLED': return 'Annulée'
+            case 'EN_ATTENTE': return 'En attente'
+            case 'PAYE': return 'Payée'
+            case 'EXPEDIE': return 'Expédiée'
+            case 'LIVRE': return 'Livrée'
+            case 'ANNULE': return 'Annulée'
             default: return status
         }
     }
