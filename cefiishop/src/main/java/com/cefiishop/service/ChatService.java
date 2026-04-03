@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.cefiishop.dto.ProductResponse;
 import com.cefiishop.model.Conversation;
+import com.cefiishop.model.IALog;
 import com.cefiishop.model.UserBehavior;
 import com.cefiishop.repository.ConversationRepository;
 
@@ -24,13 +25,16 @@ public class ChatService {
     private final ConversationRepository conversationRepository;
     private final ProductService productService;
     private final UserBehaviorService userBehaviorService;
+    private final IALogService iaLogService;
 
     public ChatService(ChatClient chatClient, ConversationRepository conversationRepository,
-            ProductService productService, UserBehaviorService userBehaviorService) {
+            ProductService productService, UserBehaviorService userBehaviorService,
+            IALogService iaLogService) {
         this.chatClient = chatClient;
         this.conversationRepository = conversationRepository;
         this.productService = productService;
         this.userBehaviorService = userBehaviorService;
+        this.iaLogService = iaLogService;
     }
 
     // Cette méthode gère une interaction de chat, en enrichissant le prompt avec les produits disponibles
@@ -81,7 +85,18 @@ public class ChatService {
         }
         history.add(new UserMessage(userContent));
 
+        long start = System.currentTimeMillis();
         String aiResponse = chatClient.prompt(new Prompt(history)).call().content();
+        long durationMs = System.currentTimeMillis() - start;
+
+        IALog log = new IALog();
+        log.setConversationId(conversationId);
+        log.setModel("llama-3.1-8b-instant");
+        log.setPrompt(userContent);
+        log.setResponse(aiResponse);
+        log.setDurationMs(durationMs);
+        log.setStatus("SUCCESS");
+        iaLogService.save(log);
 
         Conversation.Message userMsg = new Conversation.Message();
         userMsg.setRole("user");
