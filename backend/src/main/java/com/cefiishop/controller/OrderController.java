@@ -65,11 +65,4 @@ public class OrderController {
             @RequestBody UpdateOrderStatusRequest request) {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, request.getStatus()));
     }
-
-    // Supprime une commande
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
-        orderService.deleteOrder(id);
-        return ResponseEntity.noContent().build();
-    }
 }

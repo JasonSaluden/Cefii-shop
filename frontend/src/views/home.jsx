@@ -65,6 +65,10 @@ function Home() {
 
     useEffect(() => {
         getAllCategories().then(setCategories)
+    }, [])
+
+    useEffect(() => {
+        if (categories.length === 0) return
         getAllProducts().then((products) => {
             const imgMap = {}
             categories.forEach((cat) => {

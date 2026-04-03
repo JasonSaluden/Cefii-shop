@@ -8,7 +8,8 @@
       "Bash(done)",
       "Bash(xargs grep:*)",
       "Bash(rmdir cefiishop/front/cefiishop)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(powershell.exe:*)"
     ]
   }
 }

@@ -1,4 +1,12 @@
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE order_line;
+TRUNCATE TABLE orders;
+TRUNCATE TABLE products;
+TRUNCATE TABLE category;
+TRUNCATE TABLE user;
 
 -- Categories
 INSERT INTO `category` (`id_category`, `nom`, `description`) VALUES
