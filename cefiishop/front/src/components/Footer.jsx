@@ -20,8 +20,8 @@ export default function Footer() {
             {/* Newsletter Section */}
             <div className="footer-newsletter">
                 <div className="newsletter-content">
-                    <h3>Rejoignez notre communauté</h3>
-                    <p>Recevez les nouveautés dragon et offres exclusives</p>
+                    <h3>Rejoignez la communauté des dragonnets</h3>
+                    <p>Recevez les nouveautés et offres exclusives</p>
                     <form onSubmit={handleNewsletterSubmit} className="newsletter-form">
                         <input
                             type="email"
@@ -132,10 +132,7 @@ export default function Footer() {
                         &copy; {new Date().getFullYear()} CefiiShop Dragons. Tous droits réservés.
                     </p>
                     <div className="payment-methods">
-                        <span className="payment-label">Paiements acceptés :</span>
-                        <span className="payment-icon">💳</span>
-                        <span className="payment-icon">🏦</span>
-                        <span className="payment-icon">📱</span>
+                        <span className="payment-label">On accepte tous les types de paiement #ZeroExcuse</span>
                     </div>
                 </div>
             </div>
